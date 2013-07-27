@@ -1,0 +1,34 @@
+
+
+
+
+ToDo:
+- QT
+- Procurar comentários em todos os files
+- Ball and Stick view
+- Estrutura de dados para os atomos info ??
+- Rever estrutura de ficheiros 
+- 
+
+
+
+- - - -  Doc - - - -
+- Falar na tese: (um pouco disto na intro, e dps State of art com programas que usem isto)
+Types of radii:
+    Atomic radius
+    Ionic radius
+    Covalent radius
+    Metallic radius
+    Van der Waals radius
+User van der waals radius for second structure (http://en.wikipedia.org/wiki/Atomic_radius)
+
+Widely used definitions of atomic radius include:
+Van der Waals radius: in principle, half the minimum distance between the nuclei of two atoms of the element that are not bound to the same molecule.[5]
+Ionic radius: the nominal radius of the ions of an element in a specific ionization state, deduced from the spacing of atomic nuclei in crystalline salts that include that ion. In principle, the spacing between two adjacent oppositely charged ions (the length of the ionic bond between them) should equal the sum of their ionic radii.[5]
+Covalent radius: the nominal radius of the atoms of an element when covalently bound to other atoms, as deduced the separation between the atomic nuclei in molecules. In principle, the distance between two atoms that are bound to each other in a molecule (the length of that covalent bond) should equal the sum of their covalent radii.[5]
+Metallic radius: the nominal radius of atoms of an element when joined to other atoms by metallic bonds.[citation needed]
+Bohr radius: the radius of the lowest-energy electron orbit predicted by Bohr model of the atom (1913).[6][7] It is only applicable to atoms and ions with a single electron, such as hydrogen, singly ionized helium, and positronium. Although the model itself is now obsolete, the Bohr radius for the hydrogen atom is still regarded as an important physical constant.
+
+
+- Ver a razao de usar o smartArray, penso que tem a ver com o garbage collection
+- 
