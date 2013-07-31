@@ -12,8 +12,6 @@
 #include <iostream>
 #include <string>
 
-#endif /* defined(__ResEye__GeneralException__) */
-
 class GeneralException {
 	std::string message;
 	
@@ -26,3 +24,4 @@ public:
 };
 
 
+#endif /* defined(__ResEye__GeneralException__) */

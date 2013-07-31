@@ -13,8 +13,6 @@
 #include <vtkInteractorStyleTrackballCamera.h>
 #include "vtkCommand.h"
 
-#endif /* defined(__ResEye__InteractionStyles__) */
-
 class InteractionStyles{
 	
 	class MouseInteractorStyle4 : public vtkInteractorStyleTrackballCamera {};
@@ -41,3 +39,7 @@ public:
     virtual void Execute(vtkObject *caller, unsigned long eventId, void * vtkNotUsed(callData));
 
 };
+
+
+
+#endif /* defined(__ResEye__InteractionStyles__) */

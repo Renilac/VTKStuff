@@ -19,7 +19,7 @@ class LODManager{
     
 public:
 	vtkstd::list<vtkSmartPointer<vtkActor> > calculateLODActors(vtkstd::list<vtkSmartPointer<vtkActor> > actorsList);
-    
+    vtkSmartPointer<vtkActorCollection> calculateLODActors(vtkSmartPointer<vtkActorCollection> actorsList);
 };
 
 #endif /* defined(__ResEye__LODManager__) */

@@ -11,10 +11,11 @@
 
 #include <iostream>
 
-#endif /* defined(__ResEye__Utils__) */
 
 class Utils {
 	
 public:
 	const std::string currentDateTime();
 };
+
+#endif /* defined(__ResEye__Utils__) */

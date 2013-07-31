@@ -25,18 +25,17 @@
 #include <vtkAxesActor.h>
 #include <vtkOrientationMarkerWidget.h>
 #include <vtkRenderWindow.h>
-#include "SpecularSpheresExample.h"
 #include <vtkCubeAxesActor.h>
 
 // -------------------------------------------------------------------
 
-using namespace std;
+//using namespace std;
 
 int main(){
     
 	try {
 		// Another input call for file location (Qt) - TODO
-		string filepath= "../../PDB Files/4hhb.pdb";
+		std::string filepath= "../../PDB Files/4hhb.pdb";
 		// Call FileReader -> creates Array
 		FileReader *fileReader = new FileReader();
 		std::list<vtkSmartPointer<vtkPoints> > atomsLists = fileReader->getAtomsListsFromFile(filepath);
@@ -45,9 +44,13 @@ int main(){
 		vtkSmartPointer<vtkRenderer> renderer = projectionManager.InitializeCanvas();
 		
 		// Actor simulation focus area
-		vtkSmartPointer<vtkCubeSource> focusArea = vtkSmartPointer<vtkCubeSource>::New();
-		focusArea->SetBounds(-10, 10, -10, 10, -10, 10);
+		//vtkSmartPointer<vtkCubeSource> focusArea = vtkSmartPointer<vtkCubeSource>::New();
+		//focusArea->SetBounds(-10, 10, -10, 10, -10, 10);
+		vtkSmartPointer<vtkSphereSource> focusArea = vtkSmartPointer<vtkSphereSource>::New();
 		focusArea->SetCenter(0.0, 0.0, 0.0);
+		focusArea->SetRadius(10);
+		focusArea->SetThetaResolution(9);
+		focusArea->SetPhiResolution(9);
 		focusArea->Update();
 		vtkSmartPointer<vtkPolyDataMapper> focusMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
 		focusMapper->SetInputConnection(focusArea->GetOutputPort());
@@ -71,16 +74,17 @@ int main(){
 		// TODO - decidir types a inicializar
 		// converter depois
 		// Call TypesManager
+		// Init structure type
 		TypesManager *typesManager = new TypesManager();
 		std::list<vtkSmartPointer<vtkActor> > typeStructure = typesManager->convertToVanDerWallsType(atomsLists); // TODO - implementar ball and stick
 	   
 		// ---------------------------------------------------------------- MeshManager Modules ---------------------------------
 		// Call LODManager -> returns 3 Arrays
-		LODManager lodManager;
-		vtkstd::list<vtkSmartPointer<vtkActor> > lodGroupedActors = lodManager.calculateLODActors(typeStructure); // TODO - implementar
+//		LODManager lodManager;
+//		vtkstd::list<vtkSmartPointer<vtkActor> > lodGroupedActors = lodManager.calculateLODActors(typeStructure); // TODO - implementar
 		
 		// Add Actors to renderer
-		for (std::list<vtkSmartPointer<vtkActor> >::iterator it =  lodGroupedActors.begin(); it != lodGroupedActors.end(); ++it){
+		for (std::list<vtkSmartPointer<vtkActor> >::iterator it =  typeStructure.begin(); it != typeStructure.end(); ++it){
 			renderer->AddActor(*it);
 		}
 		renderer->AddActor(focusAreaActor);

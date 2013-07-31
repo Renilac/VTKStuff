@@ -24,8 +24,15 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkActor.h>
 
+#include <vtkPropPicker.h>
 #include <vtkRenderWindow.h>
 #include <vtkCommand.h>
+
+#include <vtkRendererCollection.h>
+#include <vtkRenderer.h>
+#include <vtkActorCollection.h>
+
+#include "LODManager.h"
 
 // Styles
 class MouseInteractorStyle4 : public vtkInteractorStyleTrackballCamera {
@@ -79,93 +86,106 @@ void vtkMouseMoveCallback::Execute(vtkObject *caller, unsigned long eventId, voi
 	this->y = iren->GetEventPosition()[1];
 	this->z = iren->GetEventPosition()[2];
 	
-	actor->SetPosition(this->x, this->y, 0);
+	//actor->SetPosition(this->x, this->y, 0);
 	actor->VisibilityOn();
-	std::cout << "position: "<< this->x << " " << this->y << " " << this->z << " " << std::endl;
+	//std::cout << "position: "<< this->x << " " << this->y << " " << this->z << " " << std::endl;
+	
+	// Pick from this location.
+	int* clickPos = iren->GetEventPosition();
+	vtkSmartPointer<vtkPropPicker>  picker = vtkSmartPointer<vtkPropPicker>::New();
+	picker->Pick(clickPos[0], clickPos[1], 0, iren->GetRenderWindow()->GetRenderers()->GetFirstRenderer());
+	
+	double* pos = picker->GetPickPosition();
+	std::cout << "Position (world coordinates) is: " << pos[0] << " " << pos[1] << " " << pos[2] << std::endl;
+	actor->SetPosition(pos[0], pos[1], pos[2]);
+	
+	//
+	LODManager lodManager;
+	lodManager.calculateLODActors(iren->GetRenderWindow()->GetRenderers()->GetFirstRenderer()->GetActors());
 	
 	iren->GetRenderWindow()->Render();
 }
 
 
 /*
-class vtkMouseMoveCallback : public vtkCommand {
-	
-private:
-    //int TimerCount;
-	int x, y, z;
-public:
-    vtkActor* actor;
-	
-public:
-    static vtkMouseMoveCallback *New()
-    {
-		vtkMouseMoveCallback *cb = new vtkMouseMoveCallback;
-		//cb->TimerCount = 0;
-		return cb;
-    }
-	
-    virtual void Execute(vtkObject *caller, unsigned long eventId, void * vtkNotUsed(callData)) {
-		//if (vtkCommand::TimerEvent == eventId){
-		//	++this->TimerCount;
-        //}
-		//std::cout << this->TimerCount << std::endl;
-		
-		vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::SafeDownCast(caller);
-		
-		this->x = iren->GetEventPosition()[0];
-		this->y = iren->GetEventPosition()[1];
-		this->z = iren->GetEventPosition()[2];
-		
-		actor->SetPosition(this->x, this->y, this->z);
-		std::cout << "position: "<< this->x << " " << this->x << " " << this->z << " " << std::endl;
-		
-		iren->GetRenderWindow()->Render();
-    }
-};
+ class vtkMouseMoveCallback : public vtkCommand {
+ 
+ private:
+ //int TimerCount;
+ int x, y, z;
+ public:
+ vtkActor* actor;
+ 
+ public:
+ static vtkMouseMoveCallback *New()
+ {
+ vtkMouseMoveCallback *cb = new vtkMouseMoveCallback;
+ //cb->TimerCount = 0;
+ return cb;
+ }
+ 
+ virtual void Execute(vtkObject *caller, unsigned long eventId, void * vtkNotUsed(callData)) {
+ //if (vtkCommand::TimerEvent == eventId){
+ //	++this->TimerCount;
+ //}
+ //std::cout << this->TimerCount << std::endl;
+ 
+ vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::SafeDownCast(caller);
+ 
+ this->x = iren->GetEventPosition()[0];
+ this->y = iren->GetEventPosition()[1];
+ this->z = iren->GetEventPosition()[2];
+ 
+ actor->SetPosition(this->x, this->y, this->z);
+ std::cout << "position: "<< this->x << " " << this->x << " " << this->z << " " << std::endl;
+ 
+ iren->GetRenderWindow()->Render();
+ }
+ };
  */
 
 
 // ------------------- Callback functions ------------------
 /*
-void KeypressCallbackFunction(vtkObject* caller, long unsigned int vtkNotUsed(eventId), void* clientData, void* vtkNotUsed(callData) ){
-	
-	// get render window interactor
-	vtkRenderWindowInteractor *iren = static_cast<vtkRenderWindowInteractor*>(caller);
-	
-	int * pos = iren->GetEventPosition();
-	cout << "Position: " << pos[0] << " " << pos[1] << endl;
-	
-	// Prove that we can access the cube source
-	vtkCubeSource* source = static_cast<vtkCubeSource*>(clientData);
-	//source->SetCenter(pos[0], pos[1], 0.0);
-	//source->Update();
-	
-	vtkSmartPointer<vtkTransform> transform = vtkSmartPointer<vtkTransform>::New();
-	// hmm
-	vtkSmartPointer<vtkPolyDataMapper> focusMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-	focusMapper->SetInputConnection(source->GetOutputPort());
-	vtkSmartPointer<vtkActor> focusAreaActor = vtkSmartPointer<vtkActor>::New();
-	focusAreaActor->SetMapper(focusMapper);
-	vtkPolyData* polydata = vtkPolyData::SafeDownCast(focusAreaActor->GetMapper()->GetInputAsDataSet());
-	//
-	
-	transform->SetMatrix(focusAreaActor->GetMatrix());
-	
-	vtkSmartPointer<vtkTransformPolyDataFilter> transformPolyData = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
-#if VTK_MAJOR_VERSION <= 5
-	transformPolyData->SetInputConnection(polydata->GetProducerPort());
-#else
-	transformPolyData->SetInputData(source);
-#endif
-	
-	transform->Translate(pos[0], pos[1], 0.0);
-	transformPolyData->SetTransform(transform);
-	
-	polydata->Modified();
-	//this->Data->Modified();
-	
-	transformPolyData->Update();
-	
-	std::cout << "Center is " << source->GetCenter()[0] << " " << source->GetCenter()[1] << " " << source->GetCenter()[2] <<std::endl;
-}
-*/
+ void KeypressCallbackFunction(vtkObject* caller, long unsigned int vtkNotUsed(eventId), void* clientData, void* vtkNotUsed(callData) ){
+ 
+ // get render window interactor
+ vtkRenderWindowInteractor *iren = static_cast<vtkRenderWindowInteractor*>(caller);
+ 
+ int * pos = iren->GetEventPosition();
+ cout << "Position: " << pos[0] << " " << pos[1] << endl;
+ 
+ // Prove that we can access the cube source
+ vtkCubeSource* source = static_cast<vtkCubeSource*>(clientData);
+ //source->SetCenter(pos[0], pos[1], 0.0);
+ //source->Update();
+ 
+ vtkSmartPointer<vtkTransform> transform = vtkSmartPointer<vtkTransform>::New();
+ // hmm
+ vtkSmartPointer<vtkPolyDataMapper> focusMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+ focusMapper->SetInputConnection(source->GetOutputPort());
+ vtkSmartPointer<vtkActor> focusAreaActor = vtkSmartPointer<vtkActor>::New();
+ focusAreaActor->SetMapper(focusMapper);
+ vtkPolyData* polydata = vtkPolyData::SafeDownCast(focusAreaActor->GetMapper()->GetInputAsDataSet());
+ //
+ 
+ transform->SetMatrix(focusAreaActor->GetMatrix());
+ 
+ vtkSmartPointer<vtkTransformPolyDataFilter> transformPolyData = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+ #if VTK_MAJOR_VERSION <= 5
+ transformPolyData->SetInputConnection(polydata->GetProducerPort());
+ #else
+ transformPolyData->SetInputData(source);
+ #endif
+ 
+ transform->Translate(pos[0], pos[1], 0.0);
+ transformPolyData->SetTransform(transform);
+ 
+ polydata->Modified();
+ //this->Data->Modified();
+ 
+ transformPolyData->Update();
+ 
+ std::cout << "Center is " << source->GetCenter()[0] << " " << source->GetCenter()[1] << " " << source->GetCenter()[2] <<std::endl;
+ }
+ */
