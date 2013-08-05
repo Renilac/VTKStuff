@@ -14,8 +14,6 @@ ENDIF(VTK_FOUND)
 ADD_EXECUTABLE(ResEye MACOSX_BUNDLE 
 		main.cxx
 		Atoms.h
-		AtomsBallAndStickStructure.h
-		AtomsVanDerWallsStructure.h
 		ChunkManager.h
 		FileReader.h
 		GeneralException.h
@@ -23,7 +21,6 @@ ADD_EXECUTABLE(ResEye MACOSX_BUNDLE
 		InputDataManager.h
 		InteractionStyles.h
 		LODManager.h
-		MouseEvents.h
 		ProjectionManager.h
 		TesterFile.h
 		TypesManager.h
@@ -31,8 +28,6 @@ ADD_EXECUTABLE(ResEye MACOSX_BUNDLE
 		vtkPDBReaderExample.h
 
 		Atoms.cpp
-		AtomsBallAndStickStructure.cpp
-		AtomsVanDerWallsStructure.cpp
 		ChunkManager.cpp
 		FileReader.cpp
 		GeneralException.cpp
@@ -40,7 +35,6 @@ ADD_EXECUTABLE(ResEye MACOSX_BUNDLE
 		InputDataManager.cpp
 		InteractionStyles.cpp
 		LODManager.cpp
-		MouseEvents.cpp
 		ProjectionManager.cpp
 		TesterFile.cpp
 		TypesManager.cpp

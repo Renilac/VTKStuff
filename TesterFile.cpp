@@ -94,10 +94,10 @@ void meuMapper(vtkRenderer *aren){
 	FileReader *fileReader = new FileReader();
 	TypesManager *typesManager = new TypesManager();
 	
-	std::list<vtkPoints> atomsLists = fileReader->getAtomsListsFromFile("../../PDB Files/4hhb.pdb");
-	std::list<vtkActor> typeStructure = typesManager->getTypeVanDerWalls(atomsLists);
+	vtkstd::list<vtkPoints> atomsLists = fileReader->getAtomsListsFromFile("../../PDB Files/4hhb.pdb");
+	vtkstd::list<vtkActor> typeStructure = typesManager->getTypeVanDerWalls(atomsLists);
 	
-	for (std::list<vtkActor>::iterator it =  typeStructure.begin(); it != typeStructure.end(); ++it){
+	for (vtkstd::list<vtkActor>::iterator it =  typeStructure.begin(); it != typeStructure.end(); ++it){
 		aren->AddActor(&*it);
 	}*/
 	

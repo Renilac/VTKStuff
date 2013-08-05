@@ -22,11 +22,3 @@ std::string listas[10][2] = {
 	{"colour", "1.0, 1.0, 1.0"},
 	{"blabla", "bleble"},
 };
-
-
-/*
-std::list<std::list<std::string> > ElementOxygen = {{'size' , '1.55'},
-                                 {'colour', {1, 1, 1}},
-                                 {'blabla', 'bleble'}
-                                };
-*/

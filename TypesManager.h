@@ -24,28 +24,16 @@
 
 class TypesManager{
 	
-private:
-	std::string filename;
-	
 public:
     // constructor e tal
 	TypesManager() {};
-	
-	std::string getFileName(); // TODO - ver se ainda se usa
-	std::list<vtkPoints> createAtomsFromFile(std::string filename);
-	
+
 	enum structureTypes{ VAN_DER_WALLS, BALL_AND_STICK};
-	std::list<std::string> getProteinStructureTypes();
-	
+	vtkstd::list<vtkstd::string> getProteinStructureTypes();
 	vtkstd::list<vtkSmartPointer<vtkActor> > createVanDerWallsType(vtkstd::list<vtkSmartPointer<vtkPoints> > elementsList);
 	vtkstd::list<vtkSmartPointer<vtkActor> > createBallAndStickType(vtkstd::list<vtkSmartPointer<vtkPoints> > elementsList);
 	
-	std::list<vtkSmartPointer<vtkActor> > convertToVanDerWallsType(std::list<vtkSmartPointer<vtkPoints> > elementsAtomPoints);
-	vtkPolyData *convertToBallAndStickType(vtkSmartPointer<vtkPoints> elementsAtomPoints);
-	
 	void configureAtoms(vtkPolyData *atomPositions, vtkSmartPointer<vtkPoints> atomPoints, double radius, vtkSphereSource *sphereSource, int resT, int resP, vtkGlyph3D *atomGlyphs, vtkPolyDataMapper *atomMapper, vtkActor *atomActor, double color[]);
-    void configureAtoms(vtkPolyData *atomPositions, double radius, vtkSphereSource *sphereSource, int resT, int resP, vtkGlyph3D *atomGlyphs, vtkPolyDataMapper *atomMapper, vtkActor *atomActor, double color[]);
-
 };
 
 #endif /* defined(__ResEye__TypesManager__) */

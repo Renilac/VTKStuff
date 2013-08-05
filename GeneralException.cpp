@@ -9,8 +9,10 @@
 #include "GeneralException.h"
 #include "Utils.h"
 
+#include <vtkstd/string>
+
 void GeneralException::getMessage(){
 	Utils utils;
 	
-	std::cout << "Exception " << utils.currentDateTime() << ": "  << this->message << std::endl;
+	vtkstd::cout << "Exception " << utils.currentDateTime() << ": "  << this->message << vtkstd::endl;
 }

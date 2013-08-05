@@ -20,13 +20,11 @@
 
 using namespace std;
 
-std::string filename;
-
-std::string FileReader::getFileName(){
+vtkstd::string FileReader::getFileName(){
 	return filename;
 }
 
-vtkstd::list<vtkSmartPointer<vtkPoints> > FileReader::getAtomsListsFromFile(std::string filename){
+vtkstd::list<vtkSmartPointer<vtkPoints> > FileReader::getAtomsListsFromFile(vtkstd::string filename){
 	
 	this->filename = filename;
 	
@@ -43,7 +41,7 @@ vtkstd::list<vtkSmartPointer<vtkPoints> > FileReader::getAtomsListsFromFile(std:
 			cout << "No valid file uploaded!" << endl;
 		}
 		else{
-			std::string line, element;
+			vtkstd::string line, element;
 			double x, y, z, atom_nr;
 			float atompos[3];
 			
@@ -90,7 +88,7 @@ vtkstd::list<vtkSmartPointer<vtkPoints> > FileReader::getAtomsListsFromFile(std:
 					element.erase(element.find_last_not_of(" \n\r\t")+1);
 					// trim left
 					size_t startpos = element.find_first_not_of(" \n\r\t");
-					if( std::string::npos != startpos ){
+					if( vtkstd::string::npos != startpos ){
 						element = element.substr( startpos );
 					}
 					
@@ -166,81 +164,11 @@ vtkstd::list<vtkSmartPointer<vtkPoints> > FileReader::getAtomsListsFromFile(std:
 	
 	//}catch (GeneralException e) {
 	//	error_log(e.getMessage());
-	//	std::cout << e.getMessage();
-	}catch (std::exception& e){
-		std::cerr << "exception caught: " << e.what() << '\n';
+	//	vtkstd::cout << e.getMessage();
+	}catch (vtkstd::exception& e){
+		vtkstd::cerr << "exception caught: " << e.what() << '\n';
 	}
 	
 	
 	exit(0);
-}
-
-
-//    FileReader(){
-//        
-//        ifstream input("./PDB Files/4hhb.pdb");
-//        if (input.fail()){
-//            cout << "No valid file was read!" << endl;
-//            exit(0);
-//        }
-//        else
-//        {
-//            cout << "Eles andem ai!" << endl;
-//        }
-//    }
-    
-void FileReader::handleAtoms(){
-        
-        ifstream input("./PDB Files/4hhb.pdb");
-        string line, element;
-        //double radius=0;
-        double x, y, z, atom_nr;
-        
-        if (input.fail()){
-            cout << "No valid file was read!" << endl;
-            exit(0);
-        }
-        else
-            while( getline( input, line ) ) {
-                
-                if(line.compare(0, 4, "ATOM" )==0){
-                    atom_nr = atof(line.substr(30, 8).c_str());
-                    x = atof(line.substr(30, 8).c_str());
-                    y = atof(line.substr(38, 8).c_str());
-                    z = atof(line.substr(46, 8).c_str());
-                    element = line.substr(76, 2);
-                    
-                    //cout << element << endl;
-                    
-                    // create atoms, if the coordinates are valid
-//                    if (x!=0){
-//                        //                cout << "Atom nr: " << atom_nr << " x: " << x << " y: " << y << " z: " << z << '\n';
-//                        
-//                        // color defined by element
-//                        glColor3d( 0.9, 0.9, 0.9);
-//                        if( element.compare(1,1, "C") == 0){
-//                            glColor3d( 144/(double)255, 144/(double)255, 144/(double)255);
-//                            radius=0.68;
-//                        }else if( element.compare(1,1, "N") == 0){
-//                            glColor3d( 48/(double)255, 80/(double)255, 248/(double)255);
-//                            radius=0.68;
-//                        }else if( element.compare(1,1, "O") == 0){
-//                            glColor3d( 255/(double)255, 13/(double)255, 13/(double)255);
-//                            radius=0.68;
-//                        }
-//                        
-//                        glPushMatrix();						//Save the current state of transformations
-//                        
-//                        glTranslated(x, y, z);              //Move to the center of the sphere
-//                        glRotatef(20, 1.0f, 2.0f, 3.0f);	//Rotate about the the vector (1, 2, 3)
-//                        
-//                        glutSolidSphere(radius, slices, 16);	// create sphere
-//                        
-//                        glPopMatrix();
-//                    }
-                }
-                else {
-                    //            cout << "There are no atom field!" << endl;
-                }
-            }
 }

@@ -13,10 +13,10 @@
 #include <string>
 
 class GeneralException {
-	std::string message;
+	vtkstd::string message;
 	
 public:
-	GeneralException(std::string message){
+	GeneralException(vtkstd::string message){
 		this->message = message;
 	}
 	

@@ -53,8 +53,8 @@ int main(){
 		focusAreaActor->VisibilityOff();
 		
 		// Another input call for file location (Qt) - TODO
-		//std::string filepath= "../../PDB Files/4hhb.pdb";
-		std::string filepath= "../../PDB Files/ethanol.pdb";
+		//vtkstd::string filepath= "../../PDB Files/4hhb.pdb";
+		vtkstd::string filepath= "../../PDB Files/ethanol.pdb";
 		
 		// Call FileReader -> creates Array
 		FileReader *fileReader = new FileReader();
@@ -62,77 +62,52 @@ int main(){
 		// Criar placeholders
 		vtkstd::list<vtkSmartPointer<vtkPoints> > innerElementsList = fileReader->innerElementsList;
 		vtkstd::list<vtkSmartPointer<vtkPoints> > outerElementsList = elementsListWithCoords;
-		
-		
-		
 		// Call TypesManager
-		// Init structure type
 		TypesManager *typesManager = new TypesManager();
-		//std::list<vtkSmartPointer<vtkActor> > typeStructure = typesManager->convertToVanDerWallsType(atomsLists); // TODO - implementar ball and stick
-
-		vtkstd::list<vtkSmartPointer<vtkActor> > innerActors = typesManager->createBallAndStickType(outerElementsList);
-		vtkstd::list<vtkSmartPointer<vtkActor> > outerActors = typesManager->createVanDerWallsType(innerElementsList);
+		vtkstd::list<vtkSmartPointer<vtkActor> > innerActors = typesManager->createBallAndStickType(innerElementsList);
+		vtkstd::list<vtkSmartPointer<vtkActor> > outerActors = typesManager->createVanDerWallsType(outerElementsList);
+		
+		// ------------------------------------------- MeshManager Modules ---------------------------------
 		
 		// Call InputManager
 		InputDataManager inputManager;
 		inputManager.setInteractionBehaviourToWindow(renderer, focusAreaActor, innerElementsList, outerElementsList);
 		
-	   
-		// ---------------------------------------------------------------- MeshManager Modules ---------------------------------
-		// Call LODManager -> returns 3 Arrays
-//		LODManager lodManager;
-//		vtkstd::list<vtkSmartPointer<vtkActor> > lodGroupedActors = lodManager.calculateLODActors(typeStructure); // TODO - implementar
-		
-		// Add Actors to renderer
-//		for (std::list<vtkSmartPointer<vtkActor> >::iterator it =  typeStructure.begin(); it != typeStructure.end(); ++it){
-//			renderer->AddActor(*it);
-//		}
-		
-		for (std::list<vtkSmartPointer<vtkActor> >::iterator it =  innerActors.begin(); it != innerActors.end(); ++it){
+		// Init structures
+		for (vtkstd::list<vtkSmartPointer<vtkActor> >::iterator it =  innerActors.begin(); it != innerActors.end(); ++it){
 			renderer->AddActor(*it);
 		}
-		for (std::list<vtkSmartPointer<vtkActor> >::iterator it =  outerActors.begin(); it != outerActors.end(); ++it){
+		for (vtkstd::list<vtkSmartPointer<vtkActor> >::iterator it =  outerActors.begin(); it != outerActors.end(); ++it){
 			renderer->AddActor(*it);
 		}
 		renderer->AddActor(focusAreaActor);
 		
 		// Call InfoManager  - TODO if needed
 		
-		
 		// -------- Tester, for experimental code
-	   // TesterFile tester;
+		//TesterFile tester;
 		//tester.callTester(renderer);
 		//cout << "Tester end processing!" << endl;
 		// ----------------
 
 		// TODO - fazer deletes
 		
-		// Axys Widget (falta instalar widgets)
+		// Axys Widget
 		vtkSmartPointer<vtkAxesActor> axes = vtkSmartPointer<vtkAxesActor>::New();
 		
 		vtkSmartPointer<vtkOrientationMarkerWidget> widget = vtkSmartPointer<vtkOrientationMarkerWidget>::New();
-		widget->SetOutlineColor( 0.9300, 0.5700, 0.1300 );
+		//widget->SetOutlineColor( 0.9300, 0.5700, 0.1300 );
+		widget->SetOutlineColor( 0.7, 0.7, 0.7 );
 		widget->SetOrientationMarker( axes );
 		widget->SetInteractor( renderer->GetRenderWindow()->GetInteractor());
-		widget->SetViewport( 0.0, 0.0, 0.4, 0.4 );
+		widget->SetViewport( 0.0, 0.0, 0.2, 0.2 );
 		widget->SetEnabled( 1 );
-		widget->InteractiveOn();
-		
+		widget->InteractiveOff();
+
 		// Call ProjectionManager Render
 		projectionManager.RenderProjection(renderer);
 		// ...
-
-		// -------- Exemplos - TODO remover
-		// exemplo de testes com esferas
-		//SpecularSpheresExample spheres;
-		//spheres.handleSpheresExample();
 		
-		// FileReader * Mothra= new FileReader(); ->
-		//FileReader fr;
-		//fr.handleAtoms();
-		
-		// -----------------
-
 	} catch (GeneralException  & e) {
 		e.getMessage();
 	}

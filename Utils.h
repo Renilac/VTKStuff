@@ -15,7 +15,7 @@
 class Utils {
 	
 public:
-	const std::string currentDateTime();
+	const vtkstd::string currentDateTime();
 };
 
 #endif /* defined(__ResEye__Utils__) */

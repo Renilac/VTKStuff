@@ -21,7 +21,6 @@
 class LODManager{
     
 public:
-	vtkstd::list<vtkSmartPointer<vtkActor> > calculateLODActors(vtkstd::list<vtkSmartPointer<vtkActor> > actorsList);
     vtkSmartPointer<vtkActorCollection> calculateLODActors(vtkstd::list<vtkSmartPointer<vtkPoints> > innerElementsList, vtkstd::list<vtkSmartPointer<vtkPoints> > outerElementsList, double* focusAreaCenter);
 };
 

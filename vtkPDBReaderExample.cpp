@@ -76,7 +76,7 @@ void vtkPDBReaderExample::ReadSpecificMolecule(FILE* fp){
                     this->Radii->InsertNextValue(this->NumberOfAtoms);
                 else
                     this->Radii->InsertNextValue(0.5);
-                std::cout << "Occupancy: " << static_cast<int>(strspn(dum2, " ")) << std::endl;
+                vtkstd::cout << "Occupancy: " << static_cast<int>(strspn(dum2, " ")) << vtkstd::endl;
                 //
                 
                 //sprintf(aamin[NumberOfAtoms],"%3s", dum2);
@@ -89,8 +89,8 @@ void vtkPDBReaderExample::ReadSpecificMolecule(FILE* fp){
             else
                 this->Radii->InsertNextValue(2);
             
-            //std::cout << "Occupancy: " << static_cast<int>(strspn(dum2, " ")) << std::endl;
-            std::cout << "Occupancy: " << static_cast<int>(strspn(dum2, " ")) << " atom: "<< this->NumberOfAtoms<< " radii: " << *this->Radii->GetTuple(this->NumberOfAtoms) << std::endl;
+            //vtkstd::cout << "Occupancy: " << static_cast<int>(strspn(dum2, " ")) << vtkstd::endl;
+            vtkstd::cout << "Occupancy: " << static_cast<int>(strspn(dum2, " ")) << " atom: "<< this->NumberOfAtoms<< " radii: " << *this->Radii->GetTuple(this->NumberOfAtoms) << vtkstd::endl;
             //
             
             this->AtomType->InsertNextValue(this->MakeAtomType(atype));

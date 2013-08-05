@@ -18,14 +18,14 @@
 
 class FileReader{
 public:
+	vtkstd::string filename;
 	vtkstd::list<vtkSmartPointer<vtkPoints> > innerElementsList;
 	vtkstd::list<vtkSmartPointer<vtkPoints> >  atomGroupedCoordsList;
 	
-    public:
-		vtkstd::list<vtkSmartPointer<vtkPoints> > getAtomsListsFromFile(std::string filename);
-		std::string filename;
-		std::string getFileName();
-		void handleAtoms();
+public:
+	vtkstd::string getFileName();
+	vtkstd::list<vtkSmartPointer<vtkPoints> > getAtomsListsFromFile(vtkstd::string filename);
+		
 };
 
 #endif /* defined(__ResEye__FileReader__) */

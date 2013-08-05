@@ -8,7 +8,9 @@ ToDo:
 - Ball and Stick view
 - Estrutura de dados para os atomos info ??
 - Rever estrutura de ficheiros 
-- 
+- Tirar o vtkPDBReaderExample
+- Rever os "" e os <>
+- Ver como usar variaveis do compilar para paths e tal
 
 
 
