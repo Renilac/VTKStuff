@@ -26,7 +26,7 @@ std::string FileReader::getFileName(){
 	return filename;
 }
 
-std::list<vtkSmartPointer<vtkPoints> > FileReader::getAtomsListsFromFile(std::string filename){
+vtkstd::list<vtkSmartPointer<vtkPoints> > FileReader::getAtomsListsFromFile(std::string filename){
 	
 	this->filename = filename;
 	
@@ -50,14 +50,30 @@ std::list<vtkSmartPointer<vtkPoints> > FileReader::getAtomsListsFromFile(std::st
 			//float radius=0;
 			//int resT = 7, resP = 7;
 			
-			std::list<vtkSmartPointer<vtkPoints> > atomGroupedCoordsList;
+			vtkstd::list<vtkSmartPointer<vtkPoints> > atomGroupedCoordsList;
 			// Array of points
 			vtkSmartPointer<vtkPoints> H_AtomPoints = vtkSmartPointer<vtkPoints>::New();
 			vtkSmartPointer<vtkPoints> C_AtomPoints = vtkSmartPointer<vtkPoints>::New();
 			vtkSmartPointer<vtkPoints> N_AtomPoints = vtkSmartPointer<vtkPoints>::New();
 			vtkSmartPointer<vtkPoints> O_AtomPoints = vtkSmartPointer<vtkPoints>::New();
 			vtkSmartPointer<vtkPoints> S_AtomPoints = vtkSmartPointer<vtkPoints>::New();
+			
+			// inner array of elements
+			vtkstd::list<vtkSmartPointer<vtkPoints> > innerElementsList;
+			// Array of points
+			vtkSmartPointer<vtkPoints> H2_AtomPoints = vtkSmartPointer<vtkPoints>::New();
+			vtkSmartPointer<vtkPoints> C2_AtomPoints = vtkSmartPointer<vtkPoints>::New();
+			vtkSmartPointer<vtkPoints> N2_AtomPoints = vtkSmartPointer<vtkPoints>::New();
+			vtkSmartPointer<vtkPoints> O2_AtomPoints = vtkSmartPointer<vtkPoints>::New();
+			vtkSmartPointer<vtkPoints> S2_AtomPoints = vtkSmartPointer<vtkPoints>::New();
         
+			innerElementsList.push_back(H2_AtomPoints);
+			innerElementsList.push_back(C2_AtomPoints);
+			innerElementsList.push_back(N2_AtomPoints);
+			innerElementsList.push_back(O2_AtomPoints);
+			innerElementsList.push_back(S2_AtomPoints);
+			
+			this->innerElementsList = innerElementsList;
 			
 			while(getline(input, line)) {
 				// Line containing ATOM filed
@@ -142,6 +158,8 @@ std::list<vtkSmartPointer<vtkPoints> > FileReader::getAtomsListsFromFile(std::st
 			atomGroupedCoordsList.push_back(N_AtomPoints);
 			atomGroupedCoordsList.push_back(O_AtomPoints);
 			atomGroupedCoordsList.push_back(S_AtomPoints);
+			
+			this->atomGroupedCoordsList = atomGroupedCoordsList;
 			
 			return atomGroupedCoordsList;
 		}

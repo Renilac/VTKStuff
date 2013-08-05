@@ -14,12 +14,15 @@
 #include <vtkSmartPointer.h>
 #include <vtkstd/list>
 #include <vtkActor.h>
+#include <vtkPoints.h>
+
+#include <vtkDataSet.h>
 
 class LODManager{
     
 public:
 	vtkstd::list<vtkSmartPointer<vtkActor> > calculateLODActors(vtkstd::list<vtkSmartPointer<vtkActor> > actorsList);
-    vtkSmartPointer<vtkActorCollection> calculateLODActors(vtkSmartPointer<vtkActorCollection> actorsList);
+    vtkSmartPointer<vtkActorCollection> calculateLODActors(vtkstd::list<vtkSmartPointer<vtkPoints> > innerElementsList, vtkstd::list<vtkSmartPointer<vtkPoints> > outerElementsList, double* focusAreaCenter);
 };
 
 #endif /* defined(__ResEye__LODManager__) */

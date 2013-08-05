@@ -25,6 +25,7 @@ vtkSmartPointer<vtkRenderer> ProjectionManager::InitializeCanvas(){
     // The vtkRenderWindow is a container class for vtkRenderer objects
     vtkSmartPointer<vtkRenderWindow> renderWindow = vtkRenderWindow::New();
     renderWindow->SetSize(600, 600);
+	renderWindow->SetWindowName("ResEye");
     
     renderWindow->AddRenderer(renderer);
     // renWin->Render(); // não funca

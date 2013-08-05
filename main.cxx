@@ -34,18 +34,11 @@
 int main(){
     
 	try {
-		// Another input call for file location (Qt) - TODO
-		std::string filepath= "../../PDB Files/4hhb.pdb";
-		// Call FileReader -> creates Array
-		FileReader *fileReader = new FileReader();
-		std::list<vtkSmartPointer<vtkPoints> > atomsLists = fileReader->getAtomsListsFromFile(filepath);
+		
 		// Call Projection Manager
 		ProjectionManager projectionManager;
 		vtkSmartPointer<vtkRenderer> renderer = projectionManager.InitializeCanvas();
-		
 		// Actor simulation focus area
-		//vtkSmartPointer<vtkCubeSource> focusArea = vtkSmartPointer<vtkCubeSource>::New();
-		//focusArea->SetBounds(-10, 10, -10, 10, -10, 10);
 		vtkSmartPointer<vtkSphereSource> focusArea = vtkSmartPointer<vtkSphereSource>::New();
 		focusArea->SetCenter(0.0, 0.0, 0.0);
 		focusArea->SetRadius(10);
@@ -59,24 +52,31 @@ int main(){
 		focusAreaActor->GetProperty()->SetOpacity(0.5);
 		focusAreaActor->VisibilityOff();
 		
+		// Another input call for file location (Qt) - TODO
+		//std::string filepath= "../../PDB Files/4hhb.pdb";
+		std::string filepath= "../../PDB Files/ethanol.pdb";
+		
+		// Call FileReader -> creates Array
+		FileReader *fileReader = new FileReader();
+		vtkstd::list<vtkSmartPointer<vtkPoints> > elementsListWithCoords = fileReader->getAtomsListsFromFile(filepath);
+		// Criar placeholders
+		vtkstd::list<vtkSmartPointer<vtkPoints> > innerElementsList = fileReader->innerElementsList;
+		vtkstd::list<vtkSmartPointer<vtkPoints> > outerElementsList = elementsListWithCoords;
 		
 		
-//		vtkSmartPointer<vtkCubeAxesActor> cubeAxesActor = vtkSmartPointer<vtkCubeAxesActor>::New();
-//		cubeAxesActor->SetBounds(-5.0, 5.0, -5.0, 5.0, -5.0, 5.0);
-//		cubeAxesActor->SetCamera(renderer->GetActiveCamera());
-//		
-//		renderer->AddActor(cubeAxesActor);
-		// ----
 		
-		// Call InputManager
-		InputDataManager inputManager;
-		inputManager.setInteractionBehaviourToWindow(renderer, focusAreaActor);
-		// TODO - decidir types a inicializar
-		// converter depois
 		// Call TypesManager
 		// Init structure type
 		TypesManager *typesManager = new TypesManager();
-		std::list<vtkSmartPointer<vtkActor> > typeStructure = typesManager->convertToVanDerWallsType(atomsLists); // TODO - implementar ball and stick
+		//std::list<vtkSmartPointer<vtkActor> > typeStructure = typesManager->convertToVanDerWallsType(atomsLists); // TODO - implementar ball and stick
+
+		vtkstd::list<vtkSmartPointer<vtkActor> > innerActors = typesManager->createBallAndStickType(outerElementsList);
+		vtkstd::list<vtkSmartPointer<vtkActor> > outerActors = typesManager->createVanDerWallsType(innerElementsList);
+		
+		// Call InputManager
+		InputDataManager inputManager;
+		inputManager.setInteractionBehaviourToWindow(renderer, focusAreaActor, innerElementsList, outerElementsList);
+		
 	   
 		// ---------------------------------------------------------------- MeshManager Modules ---------------------------------
 		// Call LODManager -> returns 3 Arrays
@@ -84,7 +84,14 @@ int main(){
 //		vtkstd::list<vtkSmartPointer<vtkActor> > lodGroupedActors = lodManager.calculateLODActors(typeStructure); // TODO - implementar
 		
 		// Add Actors to renderer
-		for (std::list<vtkSmartPointer<vtkActor> >::iterator it =  typeStructure.begin(); it != typeStructure.end(); ++it){
+//		for (std::list<vtkSmartPointer<vtkActor> >::iterator it =  typeStructure.begin(); it != typeStructure.end(); ++it){
+//			renderer->AddActor(*it);
+//		}
+		
+		for (std::list<vtkSmartPointer<vtkActor> >::iterator it =  innerActors.begin(); it != innerActors.end(); ++it){
+			renderer->AddActor(*it);
+		}
+		for (std::list<vtkSmartPointer<vtkActor> >::iterator it =  outerActors.begin(); it != outerActors.end(); ++it){
 			renderer->AddActor(*it);
 		}
 		renderer->AddActor(focusAreaActor);
@@ -98,6 +105,7 @@ int main(){
 		//cout << "Tester end processing!" << endl;
 		// ----------------
 
+		// TODO - fazer deletes
 		
 		// Axys Widget (falta instalar widgets)
 		vtkSmartPointer<vtkAxesActor> axes = vtkSmartPointer<vtkAxesActor>::New();

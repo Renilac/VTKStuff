@@ -10,8 +10,12 @@
 #define __ResEye__InteractionStyles__
 
 #include <iostream>
+
 #include <vtkInteractorStyleTrackballCamera.h>
-#include "vtkCommand.h"
+#include <vtkCommand.h>
+#include <vtkstd/list>
+#include <vtkSmartPointer.h>
+#include <vtkPoints.h>
 
 class InteractionStyles{
 	
@@ -28,6 +32,9 @@ private:
     int x, y, z;
 public:
     vtkActor* actor;
+	// vtkstd::list< vtkSmartPointer<vtkPoints> > pointsList; // TODO -rever
+	vtkstd::list<vtkSmartPointer<vtkPoints> > innerElementsList;
+	vtkstd::list<vtkSmartPointer<vtkPoints> > outerElementsList;
 	
 public:
     static vtkMouseMoveCallback *New() {

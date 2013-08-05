@@ -75,39 +75,29 @@ vtkStandardNewMacro(MouseInteractorStyle4);
 
 // Class vtkMouseMoveCallback
 void vtkMouseMoveCallback::Execute(vtkObject *caller, unsigned long eventId, void * vtkNotUsed(callData)) {
-	//if (vtkCommand::TimerEvent == eventId){
-	//	++this->TimerCount;
-	//}
-	//std::cout << this->TimerCount << std::endl;
 	
 	vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::SafeDownCast(caller);
-	
-	this->x = iren->GetEventPosition()[0];
-	this->y = iren->GetEventPosition()[1];
-	this->z = iren->GetEventPosition()[2];
-	
-	//actor->SetPosition(this->x, this->y, 0);
 	actor->VisibilityOn();
-	//std::cout << "position: "<< this->x << " " << this->y << " " << this->z << " " << std::endl;
 	
 	// Pick from this location.
 	int* clickPos = iren->GetEventPosition();
 	vtkSmartPointer<vtkPropPicker>  picker = vtkSmartPointer<vtkPropPicker>::New();
 	picker->Pick(clickPos[0], clickPos[1], 0, iren->GetRenderWindow()->GetRenderers()->GetFirstRenderer());
 	
-	double* pos = picker->GetPickPosition();
-	std::cout << "Position (world coordinates) is: " << pos[0] << " " << pos[1] << " " << pos[2] << std::endl;
-	actor->SetPosition(pos[0], pos[1], pos[2]);
+	double* focusAreaCenter = picker->GetPickPosition();
+	actor->SetPosition(focusAreaCenter[0], focusAreaCenter[1], focusAreaCenter[2]);
+	//std::cout << "Position (world coordinates) is: " << focusAreaCenter[0] << " " << focusAreaCenter[1] << " " << focusAreaCenter[2] << std::endl;
 	
 	//
 	LODManager lodManager;
-	lodManager.calculateLODActors(iren->GetRenderWindow()->GetRenderers()->GetFirstRenderer()->GetActors());
+	lodManager.calculateLODActors(this->innerElementsList, this->outerElementsList, focusAreaCenter);
 	
+	iren->Modified();
 	iren->GetRenderWindow()->Render();
 }
 
 
-/*
+/*etet
  class vtkMouseMoveCallback : public vtkCommand {
  
  private:

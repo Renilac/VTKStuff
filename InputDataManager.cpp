@@ -30,6 +30,7 @@
 #include <vtkCubeSource.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkActor.h>
+#include <vtkPoints.h>
 
 // Styles
 class MouseInteractorStyle4 : public vtkInteractorStyleTrackballCamera {
@@ -113,17 +114,20 @@ void KeypressCallbackFunction(vtkObject* caller, long unsigned int vtkNotUsed(ev
 	std::cout << "Center is " << source->GetCenter()[0] << " " << source->GetCenter()[1] << " " << source->GetCenter()[2] <<std::endl;
 }
 
-void InputDataManager::setInteractionBehaviourToWindow(vtkSmartPointer<vtkRenderer> renderer, vtkSmartPointer<vtkActor> focusAreaActor = NULL){
-	assignObserverInteractionMethod(renderer, focusAreaActor);
+void InputDataManager::setInteractionBehaviourToWindow(vtkSmartPointer<vtkRenderer> renderer, vtkSmartPointer<vtkActor> focusAreaActor, vtkstd::list<vtkSmartPointer<vtkPoints> > innerElementsList, vtkstd::list<vtkSmartPointer<vtkPoints> > outerElementsList){
+	assignObserverInteractionMethod(renderer, focusAreaActor, innerElementsList, outerElementsList);
 	//assignStyleInteractionMethod(renderer);
 }
 
-void InputDataManager::assignObserverInteractionMethod(vtkSmartPointer<vtkRenderer> renderer, vtkSmartPointer<vtkActor> focusAreaActor){
+void InputDataManager::assignObserverInteractionMethod(vtkSmartPointer<vtkRenderer> renderer, vtkSmartPointer<vtkActor> focusAreaActor, vtkstd::list<vtkSmartPointer<vtkPoints> > innerElementsList, vtkstd::list<vtkSmartPointer<vtkPoints> > outerElementsList){
 	//InteractionStyles inter;
 	
 	// Sign up to receive Event
 	vtkSmartPointer<vtkMouseMoveCallback> callback = vtkSmartPointer<vtkMouseMoveCallback>::New();
 	callback->actor = focusAreaActor;
+	//callback->pointsList = points;
+	callback->innerElementsList = innerElementsList;
+	callback->outerElementsList = outerElementsList;
 	renderer->GetRenderWindow()->GetInteractor()->AddObserver(vtkCommand::MouseMoveEvent, callback);
 	
 	/*
@@ -137,7 +141,7 @@ void InputDataManager::assignObserverInteractionMethod(vtkSmartPointer<vtkRender
 	*/
 }
 
-void InputDataManager::assignStyleInteractionMethod(vtkSmartPointer<vtkRenderer> renderer, vtkSmartPointer<vtkActor> focusAreaActor){
+void InputDataManager::assignStyleInteractionMethod(vtkSmartPointer<vtkRenderer> renderer, vtkSmartPointer<vtkActor> focusAreaActor, vtkstd::list<vtkSmartPointer<vtkPoints> > points){
 	//InteractionStyles inter;
 	
 	vtkSmartPointer<MouseInteractorStyle4> style = vtkSmartPointer<MouseInteractorStyle4>::New();
