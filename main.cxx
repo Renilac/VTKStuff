@@ -96,11 +96,10 @@ int main(){
 		vtkSmartPointer<vtkAxesActor> axes = vtkSmartPointer<vtkAxesActor>::New();
 		
 		vtkSmartPointer<vtkOrientationMarkerWidget> widget = vtkSmartPointer<vtkOrientationMarkerWidget>::New();
-		//widget->SetOutlineColor( 0.9300, 0.5700, 0.1300 );
 		widget->SetOutlineColor( 0.7, 0.7, 0.7 );
 		widget->SetOrientationMarker( axes );
 		widget->SetInteractor( renderer->GetRenderWindow()->GetInteractor());
-		widget->SetViewport( 0.0, 0.0, 0.2, 0.2 );
+		//widget->SetViewport( 0.0, 0.0, 0.2, 0.2 );
 		widget->SetEnabled( 1 );
 		widget->InteractiveOff();
 

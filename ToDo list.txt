@@ -11,6 +11,7 @@ ToDo:
 - Tirar o vtkPDBReaderExample
 - Rever os "" e os <>
 - Ver como usar variaveis do compilar para paths e tal
+- BUG - Nao consigo centrar as moleculas, por causa do widget
 
 
 

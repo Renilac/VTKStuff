@@ -55,15 +55,7 @@ void InputDataManager::assignObserverInteractionMethod(vtkSmartPointer<vtkRender
 	callback->outerElementsList = outerElementsList;
 	renderer->GetRenderWindow()->GetInteractor()->AddObserver(vtkCommand::MouseMoveEvent, callback);
 	
-	/*
-	vtkSmartPointer<vtkCallbackCommand> keypressCallback = vtkSmartPointer<vtkCallbackCommand>::New();
-	// Allow the observer to access the sphereSource
-	keypressCallback->SetClientData(focusArea);		// duvida
-	keypressCallback->SetCallback(KeypressCallbackFunction );
 	
-	//renderWindowInteractor->AddObserver(vtkCommand::MouseMoveEvent, keypressCallback);
-	renderer->GetRenderWindow()->GetInteractor()->AddObserver(vtkCommand::MouseMoveEvent, keypressCallback);
-	*/
 }
 
 void InputDataManager::assignStyleInteractionMethod(vtkSmartPointer<vtkRenderer> renderer, vtkSmartPointer<vtkActor> focusAreaActor, vtkstd::list<vtkSmartPointer<vtkPoints> > points){

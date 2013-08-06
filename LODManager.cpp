@@ -46,9 +46,11 @@ vtkSmartPointer<vtkActorCollection> LODManager::calculateLODActors(vtkstd::list<
 		vtkSmartPointer<vtkPoints> outerElementPoints = (*i);
 		vtkSmartPointer<vtkPoints> innerElementPoints = (*j);
 		
+		vtkstd::cout << "counter: " << elementCounter << endl;
+		
 		calculateAndTransferAtoms(innerElementPoints, outerElementPoints, elementCounter, focusAreaCenter); // TODO mudar para receber a pos do picker
 		
-		vtkstd::cout << "counter: " << elementCounter << endl;
+		
 		elementCounter++;
 		j++;
 		
@@ -74,21 +76,21 @@ void calculateAndTransferAtoms(vtkSmartPointer<vtkPoints> innerElementPoints, vt
 	vtkSmartPointer<vtkIdTypeArray> pointsIdsInsideFocus = vtkSmartPointer<vtkIdTypeArray>::New();
 	
 	for (vtkIdType i = 0; i < innerElementPoints->GetNumberOfPoints(); i++){
-		double *coords;
 		
-		if((coords = innerElementPoints->GetPoint(i))!=0){
-			// (x-x0)^2 + (y-y0)^2 + (z-z0)^2 < r^2
-			// if is inside focus area, inside of sphere equation
-			if((coords[0] - focusCenter[0])*(coords[0] - focusCenter[0]) +
-			   (coords[1] - focusCenter[1])*(coords[1] - focusCenter[1]) +
-			   (coords[2] - focusCenter[2])*(coords[2] - focusCenter[2]) < (10*10) ){
-				
-				pointsIdsInsideFocus->InsertNextValue(i);
-			}
-			// TODO - confirmar formula
+		vtkstd::cout << "Existing inner points: " << innerElementPoints->GetNumberOfPoints() << vtkstd::endl;
+		
+		double coords[3];
+		innerElementPoints->GetPoint(i, coords);
+		// (x-x0)^2 + (y-y0)^2 + (z-z0)^2 < r^2
+		// if is inside focus area, inside of sphere equation
+		if((coords[0] - focusCenter[0])*(coords[0] - focusCenter[0]) +
+		   (coords[1] - focusCenter[1])*(coords[1] - focusCenter[1]) +
+		   (coords[2] - focusCenter[2])*(coords[2] - focusCenter[2]) < (10*10) ){
 			
+			pointsIdsInsideFocus->InsertNextValue(i);
 		}
-	}	
+		// TODO - confirmar formula
+	}
 	
 	if(pointsIdsInsideFocus->GetNumberOfTuples()> 0){
 		// Call insert of same points to outer element, repectively
@@ -105,19 +107,20 @@ void calculateAndTransferAtoms(vtkSmartPointer<vtkPoints> innerElementPoints, vt
 	vtkSmartPointer<vtkIdTypeArray> pointsIdsOutsideFocus = vtkSmartPointer<vtkIdTypeArray>::New();
 	
 	for (vtkIdType i = 0; i < outerElementPoints->GetNumberOfPoints(); ++i){
-		vtkstd::cout << "Number of outer points: " << outerElementPoints->GetNumberOfPoints() << vtkstd::endl;
-		vtkstd::cout << "Current outer point id: " << i << vtkstd::endl;
 		
-		double *coords = NULL;
-		if((coords = outerElementPoints->GetPoint(i)) != 0){
-			// (x-x0)^2 + (y-y0)^2 + (z-z0)^2 < r^2
-			// if is inside focus area, inside of sphere equation
-			if((coords[0] - focusCenter[0])*(coords[0] - focusCenter[0]) +
-			   (coords[1] - focusCenter[1])*(coords[1] - focusCenter[1]) +
-			   (coords[2] - focusCenter[2])*(coords[2] - focusCenter[2]) < (10*10) ){
-				
-				pointsIdsOutsideFocus->InsertNextValue(i);
-			}
+		vtkstd::cout << "Existing outer points: " << outerElementPoints->GetNumberOfPoints() << vtkstd::endl;
+		
+		double coords[3];
+		outerElementPoints->GetPoint(i, coords);
+		//vtkstd::cout << "Outer point coords " << coords[0] << " " << coords[1] << " " << coords[2] << vtkstd::endl;
+		
+		// (x-x0)^2 + (y-y0)^2 + (z-z0)^2 < r^2
+		// if is inside focus area, inside of sphere equation
+		if((coords[0] - focusCenter[0])*(coords[0] - focusCenter[0]) +
+		   (coords[1] - focusCenter[1])*(coords[1] - focusCenter[1]) +
+		   (coords[2] - focusCenter[2])*(coords[2] - focusCenter[2]) < (10*10) ){
+			
+			pointsIdsOutsideFocus->InsertNextValue(i);
 		}
 	}
 	if(pointsIdsOutsideFocus->GetNumberOfTuples() > 0){
@@ -133,35 +136,42 @@ void calculateAndTransferAtoms(vtkSmartPointer<vtkPoints> innerElementPoints, vt
 }
 
 void ReallyDeletePoint(vtkSmartPointer<vtkPoints> points, vtkSmartPointer<vtkIdTypeArray> ids){
+	vtkstd::cout << "Removal Method" << vtkstd::endl;
 	vtkstd::cout << "Number of points: " << points->GetNumberOfPoints() << vtkstd::endl;
 	vtkstd::cout << "Number of points to remove: " << ids->GetNumberOfTuples() << vtkstd::endl;
 	
 	vtkSmartPointer<vtkPoints> newPoints = vtkSmartPointer<vtkPoints>::New();
-	double* coords = NULL;
+	double coords[3];
 	
 	for(vtkIdType i = 0 ; i < ids->GetNumberOfTuples(); i++){
-		if( (coords = points->GetPoint(i))){
-			//vtkstd::cout << "Hello " << coords[0] << " " << coords[1] << " " << coords[2] << vtkstd::endl;
-			
-			newPoints->InsertNextPoint(coords);
-		}
+		
+		points->GetPoint(i, coords);
+		vtkstd::cout << "Current point id to remove: " << i << vtkstd::endl;
+		vtkstd::cout << "coords: " << coords[0] << " " << coords[1] << " " << coords[2] << vtkstd::endl;
+		
+		newPoints->InsertNextPoint(coords);
 	}
 	
 	points->ShallowCopy(newPoints);
+	points->Modified();
 }
 
 void insertPoint(vtkSmartPointer<vtkPoints> newPoints, vtkSmartPointer<vtkIdTypeArray> ids, vtkSmartPointer<vtkPoints> previousPoints){
+	vtkstd::cout << "Insertion Method" << vtkstd::endl;
 	vtkstd::cout << "Number of points: " << newPoints->GetNumberOfPoints() << vtkstd::endl;
 	vtkstd::cout << "Number of points to insert: " << ids->GetNumberOfTuples() << vtkstd::endl;
 	
-	double* coords = NULL;
+	double coords[3];
 	
 	for(vtkIdType i = 0 ; i < ids->GetNumberOfTuples(); i++){
-		if( (coords = previousPoints->GetPoint(i))){
-			//vtkstd::cout << "Hello " << coords[0] << " " << coords[1] << " " << coords[2] << vtkstd::endl;
-			newPoints->InsertNextPoint(coords);
-		}
+		previousPoints->GetPoint(i, coords);
+		vtkstd::cout << "Current point id to insert: " << i << vtkstd::endl;
+		vtkstd::cout << "coords: " << coords[0] << " " << coords[1] << " " << coords[2] << vtkstd::endl;
+		
+		newPoints->InsertNextPoint(coords);
 	}
+	
+	newPoints->Modified();
 }
 
 

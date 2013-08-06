@@ -15,4 +15,5 @@ void GeneralException::getMessage(){
 	Utils utils;
 	
 	vtkstd::cout << "Exception " << utils.currentDateTime() << ": "  << this->message << vtkstd::endl;
+	
 }

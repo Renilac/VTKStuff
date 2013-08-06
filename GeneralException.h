@@ -10,7 +10,8 @@
 #define __ResEye__GeneralException__
 
 #include <iostream>
-#include <string>
+
+#include <vtkstd/string>
 
 class GeneralException {
 	vtkstd::string message;

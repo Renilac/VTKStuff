@@ -7,10 +7,13 @@
 //
 
 #include "Utils.h"
+
 #include <iostream>
 #include <string>
 #include <stdio.h>
 #include <time.h>
+
+#include <vtkstd/string>
 
 // Get current date/time, format is YYYY-MM-DD.HH:mm:ss
 const vtkstd::string Utils::currentDateTime() {

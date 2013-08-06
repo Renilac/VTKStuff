@@ -49,9 +49,12 @@ void vtkMouseMoveCallback::Execute(vtkObject *caller, unsigned long eventId, voi
 	actor->SetPosition(focusAreaCenter[0], focusAreaCenter[1], focusAreaCenter[2]);
 	//vtkstd::cout << "Position (world coordinates) is: " << focusAreaCenter[0] << " " << focusAreaCenter[1] << " " << focusAreaCenter[2] << vtkstd::endl;
 	
-	//
+	// Call calculation of lods to draw
 	LODManager lodManager;
 	lodManager.calculateLODActors(this->innerElementsList, this->outerElementsList, focusAreaCenter);
+	
+	//--
+	iren->GetRenderWindow()->GetRenderers()->GetFirstRenderer()->Modified();
 	
 	iren->Modified();
 	iren->GetRenderWindow()->Render();

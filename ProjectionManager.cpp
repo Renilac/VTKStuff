@@ -13,14 +13,15 @@
 #include <vtkSmartPointer.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCallbackCommand.h>
+#include <vtkCamera.h>
 
 vtkSmartPointer<vtkRenderer> ProjectionManager::InitializeCanvas(){
     
     // is the class you will use to create the renderer which will draw in the window
     vtkSmartPointer<vtkRenderer> renderer = vtkRenderer::New();
-    //renderer->SetBackground(0, 0, 0);
-    renderer ->SetBackground(0.8, 0.8, 0.8);
-	
+    renderer->SetBackground(0.8, 0.8, 0.8);
+	renderer->SetViewport( 0.0, 0.0, 1.0, 1.0 );
+
 	// vtkRenderWindow is the class you will use to create a window
     // The vtkRenderWindow is a container class for vtkRenderer objects
     vtkSmartPointer<vtkRenderWindow> renderWindow = vtkRenderWindow::New();

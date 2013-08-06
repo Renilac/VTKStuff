@@ -11,6 +11,8 @@
 
 #include <iostream>
 
+#include <vtkstd/string>
+
 
 class Utils {
 	
