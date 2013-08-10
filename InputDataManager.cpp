@@ -39,6 +39,40 @@
 #include <vtkTransform.h>
 #include <vtkTransformPolyDataFilter.h>
 
+void InputDataManager::setInteractionBehaviourToWindow(vtkSmartPointer<vtkRenderer> renderer,
+vtkSmartPointer<vtkActor> focusAreaActor,
+vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > innerElementsList,
+vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > outerElementsList){
+	
+	assignObserverInteractionMethod(renderer, focusAreaActor, innerElementsList, outerElementsList);
+	//assignStyleInteractionMethod(renderer);
+}
+
+void InputDataManager::assignObserverInteractionMethod(vtkSmartPointer<vtkRenderer> renderer,
+vtkSmartPointer<vtkActor> focusAreaActor,
+vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > innerElementsList,
+vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > outerElementsList){
+	
+	// Sign up to receive Event
+	vtkSmartPointer<vtkMouseMoveCallback> callback = vtkSmartPointer<vtkMouseMoveCallback>::New();
+	callback->actor = focusAreaActor;
+	//callback->pointsList = points;
+	
+	callback->innerElementsList = innerElementsList;
+	callback->outerElementsList = outerElementsList;
+	renderer->GetRenderWindow()->GetInteractor()->AddObserver(vtkCommand::MouseMoveEvent, callback);
+	
+	
+}
+
+void InputDataManager::assignStyleInteractionMethod(vtkSmartPointer<vtkRenderer> renderer, vtkSmartPointer<vtkActor> focusAreaActor, vtkstd::list<vtkSmartPointer<vtkPoints> > points){
+	
+	//vtkSmartPointer<MouseInteractorStyle4> style = vtkSmartPointer<MouseInteractorStyle4>::New();
+	//renderer->GetRenderWindow()->GetInteractor()->SetInteractorStyle(style);
+}
+
+
+/*
 void InputDataManager::setInteractionBehaviourToWindow(vtkSmartPointer<vtkRenderer> renderer, vtkSmartPointer<vtkActor> focusAreaActor, vtkstd::list<vtkSmartPointer<vtkPoints> > innerElementsList, vtkstd::list<vtkSmartPointer<vtkPoints> > outerElementsList){
 	assignObserverInteractionMethod(renderer, focusAreaActor, innerElementsList, outerElementsList);
 	//assignStyleInteractionMethod(renderer);
@@ -63,4 +97,4 @@ void InputDataManager::assignStyleInteractionMethod(vtkSmartPointer<vtkRenderer>
 	//vtkSmartPointer<MouseInteractorStyle4> style = vtkSmartPointer<MouseInteractorStyle4>::New();
 	//renderer->GetRenderWindow()->GetInteractor()->SetInteractorStyle(style);
 }
-
+*/

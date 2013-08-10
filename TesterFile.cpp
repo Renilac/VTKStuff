@@ -1134,7 +1134,7 @@ void mouseEventsStuff(vtkSmartPointer<vtkRenderer> renderer){
 	renderer->AddActor(actor);
 	renderer->AddActor(focusAreaActor);
 	
-	InputDataManager idm;
+	//InputDataManager idm;
 	//idm.setInteractionBehaviourToWindow(renderer, focusAreaActor, );
 
 }

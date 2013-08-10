@@ -20,10 +20,16 @@
 class InputDataManager{
   
 public:
-	void setInteractionBehaviourToWindow (vtkSmartPointer<vtkRenderer> renderer, vtkSmartPointer<vtkActor> focusAreaActor, vtkstd::list<vtkSmartPointer<vtkPoints> > innerElementsList, vtkstd::list<vtkSmartPointer<vtkPoints> > outerElementsList);
+	void setInteractionBehaviourToWindow (vtkSmartPointer<vtkRenderer> renderer,
+										  vtkSmartPointer<vtkActor> focusAreaActor,
+										  vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > innerElementsList,
+										  vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > outerElementsList);
 	
 private:
-	void assignObserverInteractionMethod(vtkSmartPointer<vtkRenderer> renderer, vtkSmartPointer<vtkActor> focusAreaActor, vtkstd::list<vtkSmartPointer<vtkPoints> > innerElementsList, vtkstd::list<vtkSmartPointer<vtkPoints> > outerElementsList);
+	void assignObserverInteractionMethod(vtkSmartPointer<vtkRenderer> renderer,
+										 vtkSmartPointer<vtkActor> focusAreaActor,
+										 vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > innerElementsList,
+										 vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > outerElementsList);
 	void assignStyleInteractionMethod(vtkSmartPointer<vtkRenderer> renderer, vtkSmartPointer<vtkActor> focusAreaActor, vtkstd::list<vtkSmartPointer<vtkPoints> > points);
 
 };

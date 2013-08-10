@@ -11,6 +11,8 @@
 
 #include <list>
 
+#include "GeneralException.h"
+
 #include "vtkSmartPointer.h"
 #include "vtkPoints.h"
 #include "vtkPolyData.h"
@@ -19,12 +21,12 @@
 class FileReader{
 public:
 	vtkstd::string filename;
-	vtkstd::list<vtkSmartPointer<vtkPoints> > innerElementsList;
-	vtkstd::list<vtkSmartPointer<vtkPoints> >  atomGroupedCoordsList;
 	
-public:
+	vtkstd::list<vtkstd::list<vtkSmartPointer<vtkPoints> > > outerElementsPointsList;
+	vtkstd::list<vtkstd::list<vtkSmartPointer<vtkPoints> > > innerElementsPointsList;
+	
 	vtkstd::string getFileName();
-	vtkstd::list<vtkSmartPointer<vtkPoints> > getAtomsListsFromFile(vtkstd::string filename);
+	void getAtomsListsFromFile(vtkstd::string filename);
 		
 };
 

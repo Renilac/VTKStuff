@@ -23,8 +23,8 @@ private:
     int x, y, z;
 public:
     vtkActor* actor;
-	vtkstd::list<vtkSmartPointer<vtkPoints> > innerElementsList;
-	vtkstd::list<vtkSmartPointer<vtkPoints> > outerElementsList;
+	vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > innerElementsList;
+	vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > outerElementsList;
 	
     static vtkMouseMoveCallback *New() {
 		vtkMouseMoveCallback *callback = new vtkMouseMoveCallback;
