@@ -40,7 +40,7 @@ vtkSmartPointer<vtkActor> TypesManager::associateVanDerWallsToActors(
 	
 	vtkSmartPointer<vtkPoints > element = focusAreaElement;
 	float radius= 0;
-	int resT= 14, resP= 14;
+	int resT= 12, resP= 12;
 	
 	if(elementPos == 0){
 		// Hydrogen
@@ -252,17 +252,76 @@ TypesManager::createVanDerWallsType(vtkstd::list<vtkstd::list<vtkSmartPointer<vt
 	try{
 		// mapping
 		vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > outerActors;
-		vtkstd::list<vtkSmartPointer<vtkActor> > actorsFocusAreas;
-		vtkSmartPointer<vtkActor> element;
+		// 4 areas
+		vtkstd::list<vtkSmartPointer<vtkActor> > focusAreaXYActors;
+		vtkstd::list<vtkSmartPointer<vtkActor> > focusAreaXYminusActors;
+		vtkstd::list<vtkSmartPointer<vtkActor> > focusAreaXminusYminusActors;
+		vtkstd::list<vtkSmartPointer<vtkActor> > focusAreaXminusYActors;
+		// Array of Points
+		// focusAreaXY		// TODO - ver se eh preciso
+		vtkSmartPointer<vtkPoints> H1_AtomActors = vtkSmartPointer<vtkPoints>::New();
+		vtkSmartPointer<vtkPoints> C1_AtomActors = vtkSmartPointer<vtkPoints>::New();
+		vtkSmartPointer<vtkPoints> N1_AtomActors = vtkSmartPointer<vtkPoints>::New();
+		vtkSmartPointer<vtkPoints> O1_AtomActors = vtkSmartPointer<vtkPoints>::New();
+		vtkSmartPointer<vtkPoints> S1_AtomActors = vtkSmartPointer<vtkPoints>::New();
+		// focusAreaXYminus
+		vtkSmartPointer<vtkPoints> H2_AtomActors = vtkSmartPointer<vtkPoints>::New();
+		vtkSmartPointer<vtkPoints> C2_AtomActors = vtkSmartPointer<vtkPoints>::New();
+		vtkSmartPointer<vtkPoints> N2_AtomActors = vtkSmartPointer<vtkPoints>::New();
+		vtkSmartPointer<vtkPoints> O2_AtomActors = vtkSmartPointer<vtkPoints>::New();
+		vtkSmartPointer<vtkPoints> S2_AtomActors = vtkSmartPointer<vtkPoints>::New();
+		// focusAreaXminusYminus
+		vtkSmartPointer<vtkPoints> H3_AtomActors = vtkSmartPointer<vtkPoints>::New();
+		vtkSmartPointer<vtkPoints> C3_AtomActors = vtkSmartPointer<vtkPoints>::New();
+		vtkSmartPointer<vtkPoints> N3_AtomActors = vtkSmartPointer<vtkPoints>::New();
+		vtkSmartPointer<vtkPoints> O3_AtomActors = vtkSmartPointer<vtkPoints>::New();
+		vtkSmartPointer<vtkPoints> S3_AtomActors = vtkSmartPointer<vtkPoints>::New();
+		// focusAreaXminusY
+		vtkSmartPointer<vtkPoints> H4_AtomActors = vtkSmartPointer<vtkPoints>::New();
+		vtkSmartPointer<vtkPoints> C4_AtomActors = vtkSmartPointer<vtkPoints>::New();
+		vtkSmartPointer<vtkPoints> N4_AtomActors = vtkSmartPointer<vtkPoints>::New();
+		vtkSmartPointer<vtkPoints> O4_AtomActors = vtkSmartPointer<vtkPoints>::New();
+		vtkSmartPointer<vtkPoints> S4_AtomActors = vtkSmartPointer<vtkPoints>::New();
 		
-		for (vtkstd::list<vtkstd::list<vtkSmartPointer<vtkPoints> > >::iterator focusAreas = elementsList.begin();
-			 focusAreas!= elementsList.end(); focusAreas++){
+//		focusAreaXYActors.push_back(H1_AtomActors);
+//		focusAreaXYActors.push_back(C1_AtomActors);
+//		focusAreaXYActors.push_back(N1_AtomActors);
+//		focusAreaXYActors.push_back(O1_AtomActors);
+//		focusAreaXYActors.push_back(S1_AtomActors);
+//		
+//		focusAreaXYminusActors.push_back(H2_AtomActors);
+//		focusAreaXYminusActors.push_back(C2_AtomActors);
+//		focusAreaXYminusActors.push_back(N2_AtomActors);
+//		focusAreaXYminusActors.push_back(O2_AtomActors);
+//		focusAreaXYminusActors.push_back(S2_AtomActors);
+//		
+//		focusAreaXminusYminusActors.push_back(H3_AtomActors);
+//		focusAreaXminusYminusActors.push_back(C3_AtomActors);
+//		focusAreaXminusYminusActors.push_back(N3_AtomActors);
+//		focusAreaXminusYminusActors.push_back(O3_AtomActors);
+//		focusAreaXminusYminusActors.push_back(S3_AtomActors);
+//		
+//		focusAreaXminusYActors.push_back(H4_AtomActors);
+//		focusAreaXminusYActors.push_back(C4_AtomActors);
+//		focusAreaXminusYActors.push_back(N4_AtomActors);
+//		focusAreaXminusYActors.push_back(O3_AtomActors);
+//		focusAreaXminusYActors.push_back(S4_AtomActors);
+//		
+//		
+//		outerActors.push_back(focusAreaXYActors);
+//		outerActors.push_back(focusAreaXYminusActors);
+//		outerActors.push_back(focusAreaXminusYminusActors);
+//		outerActors.push_back(focusAreaXminusYActors);
+
+		
+		for (vtkstd::list<vtkstd::list<vtkSmartPointer<vtkPoints> > >::iterator focusAreaPoints = elementsList.begin();
+			 focusAreaPoints!= elementsList.end(); focusAreaPoints++){
 			
 			int elementPos = 0;
-			for (vtkstd::list<vtkSmartPointer<vtkPoints> >::iterator element = (*focusAreas).begin();
-				 element != (*focusAreas).end(); element++) {
+			vtkstd::list<vtkSmartPointer<vtkActor> > actorsFocusAreas;
+			for (vtkstd::list<vtkSmartPointer<vtkPoints> >::iterator element = (*focusAreaPoints).begin();
+				 element != (*focusAreaPoints).end(); element++) {
 				
-				// meter aqui outra function ??
 				vtkSmartPointer<vtkActor> elementActor = associateVanDerWallsToActors(*element, elementPos);
 				actorsFocusAreas.push_back(elementActor);
 				elementPos++;
@@ -288,13 +347,14 @@ vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > TypesManager::createBall
 	try{
 		// mapping
 		vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > outerActors;
-		vtkstd::list<vtkSmartPointer<vtkActor> > actorsFocusAreas;
-		vtkSmartPointer<vtkActor> element;
+//		vtkstd::list<vtkSmartPointer<vtkActor> > actorsFocusAreas;
+//		vtkSmartPointer<vtkActor> element;
 		
 		for (vtkstd::list<vtkstd::list<vtkSmartPointer<vtkPoints> > >::iterator focusAreas = elementsList.begin();
 			 focusAreas!= elementsList.end(); focusAreas++){
 			
 			int elementPos = 0;
+			vtkstd::list<vtkSmartPointer<vtkActor> > actorsFocusAreas;
 			for (vtkstd::list<vtkSmartPointer<vtkPoints> >::iterator element = (*focusAreas).begin();
 				 element != (*focusAreas).end(); element++){
 				

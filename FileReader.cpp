@@ -53,7 +53,6 @@ void FileReader::getAtomsListsFromFile(vtkstd::string filename){
 			vtkstd::list<vtkstd::list<vtkSmartPointer<vtkPoints> > > outerElementsList;
 			vtkstd::list<vtkstd::list<vtkSmartPointer<vtkPoints> > > innerElementsList;
 			// Focus areas (8 quadrantes)
-			vtkstd::list<vtkSmartPointer<vtkPoints> > focusAreaXYY;
 			vtkstd::list<vtkSmartPointer<vtkPoints> > focusAreaXY;
 			vtkstd::list<vtkSmartPointer<vtkPoints> > focusAreaXYminus;
 			vtkstd::list<vtkSmartPointer<vtkPoints> > focusAreaXminusYminus;
@@ -219,12 +218,19 @@ void FileReader::getAtomsListsFromFile(vtkstd::string filename){
 						
 					}
 					else{
-						//cout << "There are others: " << element << endl;
+						// incluir restantes
+						cout << "There are others: " << element << endl;
 					}
-					// incluir restantes
+					
 					
 				}
 			} //while
+			
+//			vtkstd::cout << "Oxygen: " << O1_AtomPoints->GetNumberOfPoints() << endl;
+//			vtkstd::cout << "Oxygen: " << O2_AtomPoints->GetNumberOfPoints() << endl;
+//			vtkstd::cout << "Oxygen: " << O3_AtomPoints->GetNumberOfPoints() << endl;
+//			vtkstd::cout << "Oxygen: " << O3_AtomPoints->GetNumberOfPoints() << endl;
+			
 			
 			focusAreaXY.push_back(H1_AtomPoints);
 			focusAreaXY.push_back(C1_AtomPoints);
@@ -247,7 +253,7 @@ void FileReader::getAtomsListsFromFile(vtkstd::string filename){
 			focusAreaXminusY.push_back(H4_AtomPoints);
 			focusAreaXminusY.push_back(C4_AtomPoints);
 			focusAreaXminusY.push_back(N4_AtomPoints);
-			focusAreaXminusY.push_back(O3_AtomPoints);
+			focusAreaXminusY.push_back(O4_AtomPoints);
 			focusAreaXminusY.push_back(S4_AtomPoints);
 			
 			
@@ -264,7 +270,7 @@ void FileReader::getAtomsListsFromFile(vtkstd::string filename){
 			this->innerElementsPointsList = innerElementsList;
 			this->outerElementsPointsList = outerElementsList;
 			
-			vtkstd::cout << "readFile inner list " << &this->innerElementsPointsList << endl;
+			vtkstd::cout << "File read. \nVariable initialized.\nProjection started" << endl;
 		}
 		
 	}catch (vtkstd::exception& e){

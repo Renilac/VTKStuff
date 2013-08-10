@@ -38,8 +38,8 @@
 void vtkMouseMoveCallback::Execute(vtkObject *caller, unsigned long eventId, void * vtkNotUsed(callData)) {
 	
 	vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::SafeDownCast(caller);
-	actor->VisibilityOn();
-	
+	//actor->VisibilityOn();
+		
 	// Pick from this location.
 	int* clickPos = iren->GetEventPosition();
 	vtkSmartPointer<vtkPropPicker>  picker = vtkSmartPointer<vtkPropPicker>::New();
@@ -54,9 +54,6 @@ void vtkMouseMoveCallback::Execute(vtkObject *caller, unsigned long eventId, voi
 	lodManager.calculateLODActors(this->innerElementsList, this->outerElementsList, focusAreaCenter);
 	
 	//--
-	iren->GetRenderWindow()->GetRenderers()->GetFirstRenderer()->Modified();
-	
-	iren->Modified();
 	iren->GetRenderWindow()->Render();
 }
 

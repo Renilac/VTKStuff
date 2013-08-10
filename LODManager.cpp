@@ -40,8 +40,6 @@ void focusAreaInnerElementsVisibility(bool hidden, vtkstd::list<vtkSmartPointer<
 		else{
 			(*focusAreaInnerElement)->VisibilityOff();
 		}
-		
-		(*focusAreaInnerElement)->Modified();
 	}
 }
 
@@ -56,8 +54,6 @@ void focusAreaOuterElementsVisibility(bool hidden, vtkstd::list<vtkSmartPointer<
 		else{
 			(*focusAreaOuterElement)->VisibilityOff();
 		}
-		
-		(*focusAreaOuterElement)->Modified();
 	}
 }
 
@@ -71,49 +67,64 @@ vtkSmartPointer<vtkActorCollection> LODManager::calculateLODActors(vtkstd::list<
 	
 	// Pensar se fazer um for e verificar smp se tou no quandrante certo eh o mlhor (por cada move)
 	// quadrantes
-	vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > >::iterator focusAreaInner = outerElementsList.begin();
-	for (vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > >::iterator focusAreaOuter = outerElementsList.begin();
-		 focusAreaOuter != outerElementsList.end(); focusAreaOuter++) {
+	//	vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > >::iterator focusAreaInner = innerElementsList.begin();
+	//	for (vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > >::iterator focusAreaOuter = outerElementsList.begin();
+	//		 focusAreaOuter != outerElementsList.end(); focusAreaOuter++) {
+	
+	// Reset State
+	//		focusAreaInnerElementsVisibility(true, *focusAreaInner);
+	//		focusAreaOuterElementsVisibility(false, *focusAreaInner);
+	
+	vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > >::iterator focusAreaInner = innerElementsList.begin();
+	vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > >::iterator focusAreaOuter = outerElementsList.begin();
+	
+	// tenho que activar todos os Actors da area (quadrante) onde estou
+	if (x>=0 && y>=0){
+		//vtkstd::cout << "Found quadrant at: " << x << " " << y <<endl;
 		
-		//reset state
+		focusAreaOuterElementsVisibility(false, *focusAreaOuter);
 		focusAreaInnerElementsVisibility(true, *focusAreaInner);
-		focusAreaOuterElementsVisibility(false, *focusAreaInner);
-		
-		// tenho que activar todos os Actors da area (quadrante) onde estou
-		if (x>=0 && y>=0){
-			
-			vtkstd::cout << "Found quadrant at: " << x << " " << y <<endl;
-			
-			focusAreaOuterElementsVisibility(false, *focusAreaOuter);
-			focusAreaInnerElementsVisibility(true, *focusAreaInner);
-		}
-		else if(x>=0 && y<0){
-			vtkstd::cout << "Found quadrant at: " << x << " " << y <<endl;
-			
-			focusAreaOuterElementsVisibility(false, *focusAreaOuter);
-			focusAreaInnerElementsVisibility(true, *focusAreaInner);
-		}
-		else if(x<0 && y<0){
-			
-			vtkstd::cout << "Found quadrant at: " << x << " " << y <<endl;
-			
-			focusAreaOuterElementsVisibility(false, *focusAreaOuter);
-			focusAreaInnerElementsVisibility(true, *focusAreaInner);
-		}
-		else {
-			
-			vtkstd::cout << "Found quadrant at: " << x << " " << y <<endl;
-			
-			focusAreaOuterElementsVisibility(false, *focusAreaOuter);
-			focusAreaInnerElementsVisibility(true, *focusAreaInner);
-		}
-		
-		// inner list follows
-		focusAreaInner++;
-		
+	}
+	else{
+		focusAreaInnerElementsVisibility(false, *focusAreaInner);
+		focusAreaOuterElementsVisibility(true, *focusAreaOuter);
 	}
 	
-	//
+	// Next focusArea (quadrante)
+	focusAreaInner++;
+	focusAreaOuter++;
+	if(x>=0 && y<0){
+		focusAreaOuterElementsVisibility(false, *focusAreaOuter);
+		focusAreaInnerElementsVisibility(true, *focusAreaInner);
+	}
+	else{
+		focusAreaInnerElementsVisibility(false, *focusAreaInner);
+		focusAreaOuterElementsVisibility(true, *focusAreaOuter);
+	}
+	
+	// Next focusArea (quadrante)
+	focusAreaInner++;
+	focusAreaOuter++;
+	if(x<0 && y<0){
+		focusAreaOuterElementsVisibility(false, *focusAreaOuter);
+		focusAreaInnerElementsVisibility(true, *focusAreaInner);
+	}
+	else{
+		focusAreaInnerElementsVisibility(false, *focusAreaInner);
+		focusAreaOuterElementsVisibility(true, *focusAreaOuter);
+	}
+	
+	// Next focusArea (quadrante)
+	focusAreaInner++;
+	focusAreaOuter++;
+	if(x<0 && y>=0){
+		focusAreaOuterElementsVisibility(false, *focusAreaOuter);
+		focusAreaInnerElementsVisibility(true, *focusAreaInner);
+	}
+	else{
+		focusAreaInnerElementsVisibility(false, *focusAreaInner);
+		focusAreaOuterElementsVisibility(true, *focusAreaOuter);
+	}
 	
 	
 	// Insert the new point
@@ -123,34 +134,34 @@ vtkSmartPointer<vtkActorCollection> LODManager::calculateLODActors(vtkstd::list<
 	// Change innner Actors properties, if inner LOD active
 	// TODO - implementar ball and stick, Faltam me as bounds
 	
-//	int elementCounter = 0;  // TODO - rever
-//	vtkstd::list<vtkSmartPointer<vtkPoints> >::iterator j = innerElementsList.begin();
-//	
-//	for(vtkstd::list<vtkSmartPointer<vtkPoints> >::iterator i = outerElementsList.begin(); i != outerElementsList.end(); i++){
-//		
-//		vtkSmartPointer<vtkPoints> outerElementPoints = (*i);
-//		vtkSmartPointer<vtkPoints> innerElementPoints = (*j);
-//		
-//		vtkstd::cout << "counter: " << elementCounter << endl;
-//		
-//		calculateAndTransferAtoms(innerElementPoints, outerElementPoints, elementCounter, focusAreaCenter); // TODO mudar para receber a pos do picker
-//		
-//		
-//		elementCounter++;
-//		j++;
-//		
-//		// Bounds TODO - Não parece estar a funcar
-//		//	vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New();
-//		//
-//		//	polyData = sphereSource->GetOutput();
-//		//
-//		//	double bounds[6];
-//		//	polyData->GetBounds(bounds);
-//		//
-//		//	vtkstd::cout  << "xmin: " << bounds[0] << " " << "xmax: " << bounds[1] << vtkstd::endl
-//		//			   << "ymin: " << bounds[2] << " " << "ymax: " << bounds[3] << vtkstd::endl
-//		//			   << "zmin: " << bounds[4] << " " << "zmax: " << bounds[5] << vtkstd::endl;
-//	}
+	//	int elementCounter = 0;  // TODO - rever
+	//	vtkstd::list<vtkSmartPointer<vtkPoints> >::iterator j = innerElementsList.begin();
+	//
+	//	for(vtkstd::list<vtkSmartPointer<vtkPoints> >::iterator i = outerElementsList.begin(); i != outerElementsList.end(); i++){
+	//
+	//		vtkSmartPointer<vtkPoints> outerElementPoints = (*i);
+	//		vtkSmartPointer<vtkPoints> innerElementPoints = (*j);
+	//
+	//		vtkstd::cout << "counter: " << elementCounter << endl;
+	//
+	//		calculateAndTransferAtoms(innerElementPoints, outerElementPoints, elementCounter, focusAreaCenter); // TODO mudar para receber a pos do picker
+	//
+	//
+	//		elementCounter++;
+	//		j++;
+	//
+	//		// Bounds TODO - Não parece estar a funcar
+	//		//	vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New();
+	//		//
+	//		//	polyData = sphereSource->GetOutput();
+	//		//
+	//		//	double bounds[6];
+	//		//	polyData->GetBounds(bounds);
+	//		//
+	//		//	vtkstd::cout  << "xmin: " << bounds[0] << " " << "xmax: " << bounds[1] << vtkstd::endl
+	//		//			   << "ymin: " << bounds[2] << " " << "ymax: " << bounds[3] << vtkstd::endl
+	//		//			   << "zmin: " << bounds[4] << " " << "zmax: " << bounds[5] << vtkstd::endl;
+	//	}
 	
 	return NULL;
 }

@@ -33,8 +33,9 @@ int main(){
 		vtkstd::cout << "Starting application.." << endl;
 		
 		// Another input call for file location (Qt) - TODO
-		//vtkstd::string filepath= "../../PDB Files/4hhb.pdb";
-		vtkstd::string filepath= "../../PDB Files/ethanol.pdb";
+		vtkstd::string filepath= "../../PDB Files/4hhb.pdb";
+		//vtkstd::string filepath= "../../PDB Files/ethanol.pdb";
+		//vtkstd::string filepath= "../../PDB Files/adrenaline.pdb";
 		
 		// Call Projection Manager
 		ProjectionManager projectionManager;
@@ -69,13 +70,10 @@ int main(){
 		
 		// Call FileReader -> creates Array
 		FileReader *fileReader = new FileReader();
-		//vtkstd::list<vtkSmartPointer<vtkPoints> > elementsListWithCoords =
 		fileReader->getAtomsListsFromFile(filepath);
 		// Criar placeholders
 		vtkstd::list<vtkstd::list<vtkSmartPointer<vtkPoints> > > innerElementsPointsList = fileReader->innerElementsPointsList;
 		vtkstd::list<vtkstd::list<vtkSmartPointer<vtkPoints> > > outerElementsPointsList = fileReader->outerElementsPointsList;
-		
-		vtkstd::cout << "lista " << &fileReader->innerElementsPointsList << endl;
 		
 		// Call TypesManager
 		TypesManager *typesManager = new TypesManager();

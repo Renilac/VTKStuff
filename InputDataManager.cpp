@@ -62,7 +62,6 @@ vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > outerElementsList){
 	callback->outerElementsList = outerElementsList;
 	renderer->GetRenderWindow()->GetInteractor()->AddObserver(vtkCommand::MouseMoveEvent, callback);
 	
-	
 }
 
 void InputDataManager::assignStyleInteractionMethod(vtkSmartPointer<vtkRenderer> renderer, vtkSmartPointer<vtkActor> focusAreaActor, vtkstd::list<vtkSmartPointer<vtkPoints> > points){
