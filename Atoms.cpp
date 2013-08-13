@@ -10,13 +10,6 @@
 #include <iostream>
 #include <list>
 
-// TODO
-// List of atoms
-// Colours
-// Size ??
-// Bonds creation
-//
-
 std::string listas[10][2] = {
 	{"size" , "1.55"},
 	{"colour", "1.0, 1.0, 1.0"},

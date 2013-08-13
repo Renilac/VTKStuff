@@ -40,28 +40,40 @@
 #include <vtkTransformPolyDataFilter.h>
 
 void InputDataManager::setInteractionBehaviourToWindow(vtkSmartPointer<vtkRenderer> renderer,
-vtkSmartPointer<vtkActor> focusAreaActor,
-vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > innerElementsList,
-vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > outerElementsList){
+     vtkSmartPointer<vtkActor> focusAreaActor,
+     vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > innerElementsList,
+     vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > outerElementsList,
+     vtkstd::list<vtkSmartPointer<vtkActor> > innerBondsActors){
 	
-	assignObserverInteractionMethod(renderer, focusAreaActor, innerElementsList, outerElementsList);
+	assignObserverInteractionMethod(renderer, focusAreaActor, innerElementsList, outerElementsList, innerBondsActors);
 	//assignStyleInteractionMethod(renderer);
 }
 
 void InputDataManager::assignObserverInteractionMethod(vtkSmartPointer<vtkRenderer> renderer,
-vtkSmartPointer<vtkActor> focusAreaActor,
-vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > innerElementsList,
-vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > outerElementsList){
+													   vtkSmartPointer<vtkActor> focusAreaActor,
+													   vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > innerElementsList,
+													   vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > outerElementsList,
+													   vtkstd::list<vtkSmartPointer<vtkActor> > innerBondsActors){
 	
 	// Sign up to receive Event
 	vtkSmartPointer<vtkMouseMoveCallback> callback = vtkSmartPointer<vtkMouseMoveCallback>::New();
 	callback->actor = focusAreaActor;
-	//callback->pointsList = points;
 	
+	double bounds[6];
+	renderer->ComputeVisiblePropBounds(bounds);
+	
+	callback->bounds[0] = bounds[0];
+	callback->bounds[1] = bounds[1];
+	callback->bounds[2] = bounds[2];
+	callback->bounds[3] = bounds[3];
+	callback->bounds[4] = bounds[4];
+	callback->bounds[5] = bounds[5];
 	callback->innerElementsList = innerElementsList;
 	callback->outerElementsList = outerElementsList;
+	callback->innerBondsActors = innerBondsActors;
 	renderer->GetRenderWindow()->GetInteractor()->AddObserver(vtkCommand::MouseMoveEvent, callback);
 	
+	//delete [] bounds;
 }
 
 void InputDataManager::assignStyleInteractionMethod(vtkSmartPointer<vtkRenderer> renderer, vtkSmartPointer<vtkActor> focusAreaActor, vtkstd::list<vtkSmartPointer<vtkPoints> > points){

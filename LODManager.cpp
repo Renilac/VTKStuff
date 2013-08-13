@@ -29,17 +29,21 @@ void ReallyDeletePoint(vtkSmartPointer<vtkPoints> points, vtkSmartPointer<vtkIdT
 void insertPoint(vtkSmartPointer<vtkPoints> points, vtkSmartPointer<vtkIdTypeArray> id, vtkSmartPointer<vtkPoints> previousPoints);
 
 // Method implementations
-void focusAreaInnerElementsVisibility(bool hidden, vtkstd::list<vtkSmartPointer<vtkActor> > focusAreaInnerElements){
+void focusAreaInnerElementsVisibility(bool hidden, vtkstd::list<vtkSmartPointer<vtkActor> > focusAreaInnerElements,
+									  vtkSmartPointer<vtkActor> innerBondsActors){
 	
 	for (vtkstd::list<vtkSmartPointer<vtkActor> >::iterator focusAreaInnerElement = focusAreaInnerElements.begin();
 		 focusAreaInnerElement != focusAreaInnerElements.end(); focusAreaInnerElement++) {
 		
 		if(hidden){
 			(*focusAreaInnerElement)->VisibilityOn();
+			innerBondsActors->VisibilityOn();
 		}
 		else{
 			(*focusAreaInnerElement)->VisibilityOff();
+			innerBondsActors->VisibilityOn();
 		}
+		
 	}
 }
 
@@ -59,11 +63,12 @@ void focusAreaOuterElementsVisibility(bool hidden, vtkstd::list<vtkSmartPointer<
 
 vtkSmartPointer<vtkActorCollection> LODManager::calculateLODActors(vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > innerElementsList,
 																   vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > outerElementsList,
-																   double* focusAreaCenter){
+																   vtkstd::list<vtkSmartPointer<vtkActor> > innerBondsActors,
+																   double* focusAreaCenter, double bounds[6]){
 	
 	double x = focusAreaCenter[0];
 	double y = focusAreaCenter[1];
-	//double z = focusAreaCenter[2];
+	double z = focusAreaCenter[2];
 	
 	// Pensar se fazer um for e verificar smp se tou no quandrante certo eh o mlhor (por cada move)
 	// quadrantes
@@ -77,52 +82,65 @@ vtkSmartPointer<vtkActorCollection> LODManager::calculateLODActors(vtkstd::list<
 	
 	vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > >::iterator focusAreaInner = innerElementsList.begin();
 	vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > >::iterator focusAreaOuter = outerElementsList.begin();
+	vtkstd::list<vtkSmartPointer<vtkActor> >::iterator innerBondsActor = innerBondsActors.begin();
 	
-	// tenho que activar todos os Actors da area (quadrante) onde estou
+	
+	// Desactivar os LOD se fora das bounds da projecção
+//	vtkstd::cout << bounds[0] << " " << bounds[1] << " " << bounds[2] << " " << bounds[3] << " " << bounds[4] << " " << bounds[5] << endl;
+//	if((bounds[0] < x || bounds[1] > x ) && (bounds[2] < y || bounds[3] > y ) && (bounds[4] < z || bounds[5] > z )){
+//		focusAreaInnerElementsVisibility(false, *focusAreaInner);
+//		focusAreaOuterElementsVisibility(true, *focusAreaOuter);
+//		return 0;
+//	}
+	
+	// tenho que activar os Actors da area (quadrante) onde estou
 	if (x>=0 && y>=0){
 		//vtkstd::cout << "Found quadrant at: " << x << " " << y <<endl;
 		
 		focusAreaOuterElementsVisibility(false, *focusAreaOuter);
-		focusAreaInnerElementsVisibility(true, *focusAreaInner);
+		focusAreaInnerElementsVisibility(true, *focusAreaInner, *innerBondsActor);
 	}
 	else{
-		focusAreaInnerElementsVisibility(false, *focusAreaInner);
+		focusAreaInnerElementsVisibility(false, *focusAreaInner, *innerBondsActor);
 		focusAreaOuterElementsVisibility(true, *focusAreaOuter);
 	}
 	
 	// Next focusArea (quadrante)
 	focusAreaInner++;
 	focusAreaOuter++;
+	innerBondsActor++;
 	if(x>=0 && y<0){
 		focusAreaOuterElementsVisibility(false, *focusAreaOuter);
-		focusAreaInnerElementsVisibility(true, *focusAreaInner);
+		focusAreaInnerElementsVisibility(true, *focusAreaInner, *innerBondsActor);
 	}
 	else{
-		focusAreaInnerElementsVisibility(false, *focusAreaInner);
+		focusAreaInnerElementsVisibility(false, *focusAreaInner, *innerBondsActor);
 		focusAreaOuterElementsVisibility(true, *focusAreaOuter);
 	}
 	
 	// Next focusArea (quadrante)
 	focusAreaInner++;
 	focusAreaOuter++;
+	innerBondsActor++;
 	if(x<0 && y<0){
 		focusAreaOuterElementsVisibility(false, *focusAreaOuter);
-		focusAreaInnerElementsVisibility(true, *focusAreaInner);
+		focusAreaInnerElementsVisibility(true, *focusAreaInner, *innerBondsActor);
 	}
 	else{
-		focusAreaInnerElementsVisibility(false, *focusAreaInner);
+		focusAreaInnerElementsVisibility(false, *focusAreaInner, *innerBondsActor);
 		focusAreaOuterElementsVisibility(true, *focusAreaOuter);
 	}
 	
 	// Next focusArea (quadrante)
 	focusAreaInner++;
 	focusAreaOuter++;
+	innerBondsActor++;
 	if(x<0 && y>=0){
 		focusAreaOuterElementsVisibility(false, *focusAreaOuter);
-		focusAreaInnerElementsVisibility(true, *focusAreaInner);
+		focusAreaInnerElementsVisibility(true, *focusAreaInner, *innerBondsActor);
 	}
 	else{
-		focusAreaInnerElementsVisibility(false, *focusAreaInner);
+		focusAreaInnerElementsVisibility(false, *focusAreaInner, *innerBondsActor);
 		focusAreaOuterElementsVisibility(true, *focusAreaOuter);
 	}
 	
@@ -132,9 +150,8 @@ vtkSmartPointer<vtkActorCollection> LODManager::calculateLODActors(vtkstd::list<
 	// will update the view with the new data
 	// Get inner and outer Actors
 	// Change innner Actors properties, if inner LOD active
-	// TODO - implementar ball and stick, Faltam me as bounds
 	
-	//	int elementCounter = 0;  // TODO - rever
+	//	int elementCounter = 0;
 	//	vtkstd::list<vtkSmartPointer<vtkPoints> >::iterator j = innerElementsList.begin();
 	//
 	//	for(vtkstd::list<vtkSmartPointer<vtkPoints> >::iterator i = outerElementsList.begin(); i != outerElementsList.end(); i++){
@@ -144,13 +161,13 @@ vtkSmartPointer<vtkActorCollection> LODManager::calculateLODActors(vtkstd::list<
 	//
 	//		vtkstd::cout << "counter: " << elementCounter << endl;
 	//
-	//		calculateAndTransferAtoms(innerElementPoints, outerElementPoints, elementCounter, focusAreaCenter); // TODO mudar para receber a pos do picker
+	//		calculateAndTransferAtoms(innerElementPoints, outerElementPoints, elementCounter, focusAreaCenter); 
 	//
 	//
 	//		elementCounter++;
 	//		j++;
 	//
-	//		// Bounds TODO - Não parece estar a funcar
+	//
 	//		//	vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New();
 	//		//
 	//		//	polyData = sphereSource->GetOutput();
@@ -185,7 +202,7 @@ void calculateAndTransferAtoms(vtkSmartPointer<vtkPoints> innerElementPoints, vt
 			
 			pointsIdsInsideFocus->InsertNextValue(i);
 		}
-		// TODO - confirmar formula
+		
 	}
 	
 	if(pointsIdsInsideFocus->GetNumberOfTuples()> 0){

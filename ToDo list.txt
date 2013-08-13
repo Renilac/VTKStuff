@@ -1,20 +1,3 @@
-
-
-
-
-ToDo:
-- QT
-- Procurar comentários em todos os files
-- Ball and Stick view
-- Estrutura de dados para os atomos info ??
-- Rever estrutura de ficheiros 
-- Tirar o vtkPDBReaderExample
-- Rever os "" e os <>
-- Ver como usar variaveis do compilar para paths e tal
-- BUG - Nao consigo centrar as moleculas, por causa do widget
-
-
-
 - - - -  Doc - - - -
 - Falar na tese: (um pouco disto na intro, e dps State of art com programas que usem isto)
 Types of radii:
@@ -35,3 +18,46 @@ Bohr radius: the radius of the lowest-energy electron orbit predicted by Bohr mo
 
 - Ver a razao de usar o smartArray, penso que tem a ver com o garbage collection
 - 
+
+- - - -  Protótipo - - - -
+
+ToDo:
+- QT
+- Procurar comentários em todos os files
+- Rever estrutura de ficheiros
+- Tirar o vtkPDBReaderExample
+- Rever os "" e os <>
+- Ver como usar variaveis do compilar para paths e tal
+
+Específico:
+
+-TypesManager.cpp
+linha 42
+// TODO - Mapear bem os atomos
+linha 69
+// TODO - agrupar variaveis (radius, color)
+// TODO - falta calcular Van der Waals radius
+linha 257
+// TODO - ver se eh preciso
+
+- main.cpp
+linha 35
+// Another input call for file location (Qt) - TODO
+linha 92
+// TODO - LODManager adiciona actors
+linha 123
+// TODO - fazer deletes
+
+- LODManager.cpp
+linha 89
+// TODO - bound não funca
+linha 204
+// TODO - confirmar formula
+
+- Atoms.cpp
+// TODO
+// List of atoms
+// Colours
+// Size ??
+// Bonds creation
+//

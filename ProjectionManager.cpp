@@ -29,7 +29,6 @@ vtkSmartPointer<vtkRenderer> ProjectionManager::InitializeCanvas(){
 	renderWindow->SetWindowName("ResEye");
     
     renderWindow->AddRenderer(renderer);
-    // renWin->Render(); // não funca
     
     // In order to interact with the scene using the mouse we will use an instance of vtkRenderWindowInteractor
     vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor = vtkRenderWindowInteractor::New();

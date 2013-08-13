@@ -31,9 +31,11 @@ public:
 	TypesManager() {};
 
 	enum structureTypes{ VAN_DER_WALLS, BALL_AND_STICK};
+	
 	vtkstd::list<vtkstd::string> getProteinStructureTypes();
 	vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > createVanDerWallsType(vtkstd::list<vtkstd::list<vtkSmartPointer<vtkPoints> > > elementsList);
 	vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > createBallAndStickType(vtkstd::list<vtkstd::list<vtkSmartPointer<vtkPoints> > > elementsList);
+	vtkstd::list<vtkSmartPointer<vtkActor> > createBallAndStickTypeBonds(vtkstd::list<vtkstd::list<vtkSmartPointer<vtkPoints> > > elementsList);
 	
 	void configureAtoms(vtkPolyData *atomPositions, vtkSmartPointer<vtkPoints> atomPoints,
 						double radius, vtkSphereSource *sphereSource, int resT, int resP,

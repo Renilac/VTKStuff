@@ -197,7 +197,6 @@ void FileReader::getAtomsListsFromFile(vtkstd::string filename){
 							O4_AtomPoints->InsertNextPoint(x, y, z);
 						}
 
-						
 					}
 					else if(element.compare("S") == 0
 							|| element.compare("SD") == 0
@@ -226,10 +225,10 @@ void FileReader::getAtomsListsFromFile(vtkstd::string filename){
 				}
 			} //while
 			
-//			vtkstd::cout << "Oxygen: " << O1_AtomPoints->GetNumberOfPoints() << endl;
-//			vtkstd::cout << "Oxygen: " << O2_AtomPoints->GetNumberOfPoints() << endl;
-//			vtkstd::cout << "Oxygen: " << O3_AtomPoints->GetNumberOfPoints() << endl;
-//			vtkstd::cout << "Oxygen: " << O3_AtomPoints->GetNumberOfPoints() << endl;
+			vtkstd::cout << "Hydrogen: " << H1_AtomPoints->GetNumberOfPoints() << endl;
+			vtkstd::cout << "Hydrogen: " << H2_AtomPoints->GetNumberOfPoints() << endl;
+			vtkstd::cout << "Hydrogen: " << H3_AtomPoints->GetNumberOfPoints() << endl;
+			vtkstd::cout << "Hydrogen: " << H3_AtomPoints->GetNumberOfPoints() << endl;
 			
 			
 			focusAreaXY.push_back(H1_AtomPoints);

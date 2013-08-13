@@ -926,7 +926,7 @@ void mols2(){
 
 }
 
-// Mols 3 - Exemplo retirado do PDBReader, ToDo - modificar
+// Mols 3 - Exemplo retirado do PDBReader, 
 void mols3(vtkSmartPointer<vtkRenderer> renderer){
     cout << "Molecular Struture 3!"<< endl;
     

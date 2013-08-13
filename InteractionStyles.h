@@ -23,8 +23,10 @@ private:
     int x, y, z;
 public:
     vtkActor* actor;
+	double bounds[6];
 	vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > innerElementsList;
 	vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > outerElementsList;
+	vtkstd::list<vtkSmartPointer<vtkActor> > innerBondsActors;
 	
     static vtkMouseMoveCallback *New() {
 		vtkMouseMoveCallback *callback = new vtkMouseMoveCallback;

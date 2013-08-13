@@ -51,7 +51,9 @@ void vtkMouseMoveCallback::Execute(vtkObject *caller, unsigned long eventId, voi
 	
 	// Call calculation of lods to draw
 	LODManager lodManager;
-	lodManager.calculateLODActors(this->innerElementsList, this->outerElementsList, focusAreaCenter);
+	lodManager.calculateLODActors(this->innerElementsList, this->outerElementsList, this->innerBondsActors, focusAreaCenter, this->bounds);
+	
+	
 	
 	//--
 	iren->GetRenderWindow()->Render();

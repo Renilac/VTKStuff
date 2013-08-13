@@ -23,13 +23,15 @@ public:
 	void setInteractionBehaviourToWindow (vtkSmartPointer<vtkRenderer> renderer,
 										  vtkSmartPointer<vtkActor> focusAreaActor,
 										  vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > innerElementsList,
-										  vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > outerElementsList);
+										  vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > outerElementsList,
+										  vtkstd::list<vtkSmartPointer<vtkActor> > innerBondsActors);
 	
 private:
 	void assignObserverInteractionMethod(vtkSmartPointer<vtkRenderer> renderer,
 										 vtkSmartPointer<vtkActor> focusAreaActor,
 										 vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > innerElementsList,
-										 vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > outerElementsList);
+										 vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > outerElementsList,
+										 vtkstd::list<vtkSmartPointer<vtkActor> > innerBondsActors);
 	void assignStyleInteractionMethod(vtkSmartPointer<vtkRenderer> renderer, vtkSmartPointer<vtkActor> focusAreaActor, vtkstd::list<vtkSmartPointer<vtkPoints> > points);
 
 };

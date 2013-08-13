@@ -32,10 +32,10 @@ int main(){
 	try {
 		vtkstd::cout << "Starting application.." << endl;
 		
-		// Another input call for file location (Qt) - TODO
-		vtkstd::string filepath= "../../PDB Files/4hhb.pdb";
+		
+		//vtkstd::string filepath= "../../PDB Files/4hhb.pdb";
 		//vtkstd::string filepath= "../../PDB Files/ethanol.pdb";
-		//vtkstd::string filepath= "../../PDB Files/adrenaline.pdb";
+		vtkstd::string filepath= "../../PDB Files/adrenaline.pdb";
 		
 		// Call Projection Manager
 		ProjectionManager projectionManager;
@@ -78,29 +78,36 @@ int main(){
 		// Call TypesManager
 		TypesManager *typesManager = new TypesManager();
 		vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > innerActors = typesManager->createBallAndStickType(innerElementsPointsList);
+		vtkstd::list<vtkSmartPointer<vtkActor> > innerBondsActors = typesManager->createBallAndStickTypeBonds(innerElementsPointsList);
+		
 		vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > > outerActors = typesManager->createVanDerWallsType(outerElementsPointsList);
+		
 		
 		// ------------------------------------------- MeshManager Modules ---------------------------------
 		
 		// Call InputManager
 		InputDataManager inputManager;
-		inputManager.setInteractionBehaviourToWindow(renderer, focusAreaActor, innerActors, outerActors); // TODO Remover focusAreaActor
+		inputManager.setInteractionBehaviourToWindow(renderer, focusAreaActor, innerActors, outerActors, innerBondsActors);
 		
-		// TODO - LODManager adiciona actors
-		// Init structures
+		
+		// Add All Actors to Renderer
 		for (vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > >::iterator it =  innerActors.begin(); it != innerActors.end(); ++it){
 			for (vtkstd::list<vtkSmartPointer<vtkActor> >::iterator actors =  (*it).begin(); actors != (*it).end(); ++actors){
 				renderer->AddActor(*actors);
 			}
 		}
+		// Bonds divided by focus areas (quadrantes)
+		for (vtkstd::list<vtkSmartPointer<vtkActor> >::iterator bondsActor =  innerBondsActors.begin(); bondsActor != innerBondsActors.end(); ++bondsActor){
+			renderer->AddActor(*bondsActor);
+		}
+		//
 		for (vtkstd::list<vtkstd::list<vtkSmartPointer<vtkActor> > >::iterator it =  outerActors.begin(); it != outerActors.end(); ++it){
 			for (vtkstd::list<vtkSmartPointer<vtkActor> >::iterator actors =  (*it).begin(); actors != (*it).end(); ++actors){
 				renderer->AddActor(*actors);
 			}
 		}
 		renderer->AddActor(focusAreaActor);
-		
-		// Call InfoManager  - TODO if needed
+		renderer->ResetCamera();
 		
 		// Call ProjectionManager Render
 		projectionManager.RenderProjection(renderer);
@@ -113,7 +120,8 @@ int main(){
 		//cout << "Tester end processing!" << endl;
 		// ----------------
 		
-		// TODO - fazer deletes
+		//delete projectionManager;
+		delete typesManager;
 		
 	} catch (GeneralException  & e) {
 		e.getMessage();
@@ -145,7 +153,7 @@ int main(){
 		focusAreaActor->GetProperty()->SetOpacity(0.5);
 		focusAreaActor->VisibilityOff();
 		
-		// Another input call for file location (Qt) - TODO
+	
 		//vtkstd::string filepath= "../../PDB Files/4hhb.pdb";
 		vtkstd::string filepath= "../../PDB Files/ethanol.pdb";
 		
@@ -174,16 +182,13 @@ int main(){
 			renderer->AddActor(*it);
 		}
 		renderer->AddActor(focusAreaActor);
-		
-		// Call InfoManager  - TODO if needed
-		
+	
 		// -------- Tester, for experimental code
 		//TesterFile tester;
 		//tester.callTester(renderer);
 		//cout << "Tester end processing!" << endl;
 		// ----------------
 
-		// TODO - fazer deletes
 		
 		// Axys Widget
 		vtkSmartPointer<vtkAxesActor> axes = vtkSmartPointer<vtkAxesActor>::New();
